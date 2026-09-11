@@ -37,29 +37,28 @@ export default function Home() {
     setDirection(moveDir);
     setShowMenu(false);
 
-    // Phase 1: Smoothly fade & glide out current screen
+    // Phase 1: Slow deliberate exit wipe
     setTransitionState("exiting");
 
     setTimeout(() => {
-      // Phase 2: Switch component & reset scroll position silently
+      // Phase 2: Switch component and reset viewport
       setCurrentIndex(newIndex);
       window.scrollTo({ top: 0, behavior: "instant" });
       setTransitionState("entering");
 
-      // Phase 3: Slide in new page smoothly
+      // Phase 3: Smoothly enter new screen
       requestAnimationFrame(() => {
         setTimeout(() => {
           setTransitionState("active");
           isBusy.current = false;
-        }, 30);
+        }, 60);
       });
-    }, 380); // Duration matches CSS exit time
+    }, 700);
   };
 
   const handleNext = () => goToSection(currentIndex + 1);
   const handlePrev = () => goToSection(currentIndex - 1);
 
-  // Keyboard controls
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (["input", "textarea"].includes(document.activeElement?.tagName?.toLowerCase())) {
@@ -81,7 +80,6 @@ export default function Home() {
   const CurrentComponent = SECTIONS[currentIndex].component;
   const currentSection = SECTIONS[currentIndex];
 
-  // Derive animation class
   let animationClass = "screen-active";
   if (transitionState === "exiting") {
     animationClass = direction === "next" ? "screen-exit-to-next" : "screen-exit-to-prev";
@@ -94,7 +92,7 @@ export default function Home() {
       {/* Scanline CRT overlay */}
       <div className="scanline" aria-hidden="true" />
 
-      {/* Ambient background glow accents */}
+      {/* Ambient glow accents */}
       <div className="fixed -top-40 -left-40 w-80 sm:w-96 h-80 sm:h-96 bg-poke-red/10 rounded-full blur-[140px] pointer-events-none" />
       <div className="fixed top-1/2 -right-40 w-80 sm:w-96 h-80 sm:h-96 bg-poke-blue/10 rounded-full blur-[140px] pointer-events-none" />
 
@@ -108,16 +106,16 @@ export default function Home() {
       />
 
       {/* Main Viewport Container */}
-      <main className="relative z-10 min-h-[calc(100vh-80px)] pb-28">
+      <main className="relative z-10 min-h-[calc(100vh-80px)] pt-20 pb-28">
         <div className={`screen-wrapper ${animationClass}`}>
           <CurrentComponent onStartClick={handleNext} />
         </div>
       </main>
 
-      {/* 📻 RETRO POKÉ-RADIO PLAYER (Bottom-Left) */}
+      {/* 📻 RETRO POKÉ-RADIO PLAYER */}
       <PokeRadio />
 
-      {/* 🎮 RETRO ARCADE CONTROLLER HUD (Bottom-Right) */}
+      {/* 🎮 RETRO ARCADE CONTROLLER HUD */}
       <aside
         aria-label="Navigation HUD"
         className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50 flex items-center gap-2 select-none"
@@ -166,9 +164,8 @@ export default function Home() {
           </div>
         </button>
 
-        {/* Arcade D-Pad Controls */}
+        {/* D-Pad Controls */}
         <div className="flex items-center bg-black/90 border-2 border-white/20 p-1 rounded-sm shadow-[0_0_20px_rgba(0,0,0,0.8)] backdrop-blur-md">
-          {/* PREVIOUS */}
           <button
             onClick={handlePrev}
             disabled={currentIndex === 0 || transitionState !== "active"}
@@ -184,7 +181,6 @@ export default function Home() {
 
           <div className="w-px h-6 bg-white/15 mx-1" />
 
-          {/* NEXT */}
           <button
             onClick={handleNext}
             disabled={currentIndex === SECTIONS.length - 1 || transitionState !== "active"}

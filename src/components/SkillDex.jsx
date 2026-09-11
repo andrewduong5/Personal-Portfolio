@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Database, Cloud, Target, Sparkles, Activity } from "lucide-react";
 import PokeBall from "./PokeBall";
 import SectionPokemon from "./AmbientPokemon";
+import TypewriterTitle from "./TypewriterTitle";
 import {
   PythonIcon, SqlIcon, JavaScriptIcon, CppIcon, PowerShellIcon,
   AwsIcon, ProxmoxIcon, DockerIcon, WindowsIcon, LinuxIcon,
@@ -64,9 +65,10 @@ export default function SkillDex() {
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
               <Database className="w-5 h-5 text-poke-red animate-pulse" />
-              <h2 className="press-start text-xs sm:text-sm md:text-base text-white tracking-wide">
-                SKILL-DEX
-              </h2>
+              <TypewriterTitle
+                text="SKILL-DEX"
+                className="press-start text-xs sm:text-sm md:text-base text-white tracking-wide"
+              />
               <div className="hover:rotate-180 transition-transform duration-500 cursor-pointer">
                 <PokeBall size={22} variant={meta.ball} />
               </div>

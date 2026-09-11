@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Mail, Phone, MapPin, Linkedin, Github, Send } from "lucide-react";
 import PokeBall from "./PokeBall";
 import SectionPokemon from "./AmbientPokemon";
+import TypewriterTitle from "./TypewriterTitle";
 
 const LINKEDIN = "https://www.linkedin.com/in/andrew-duong85";
 const GITHUB = "https://github.com/andrewduong5";
@@ -35,9 +36,10 @@ export default function LinkCable() {
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
               <Send className="w-5 h-5 text-poke-red" />
-              <h2 className="press-start text-xs sm:text-sm md:text-base text-white tracking-wide">
-                LINK CABLE
-              </h2>
+              <TypewriterTitle
+                text="LINK CABLE"
+                className="press-start text-xs sm:text-sm md:text-base text-white tracking-wide"
+              />
               <PokeBall size={20} variant="dive" />
             </div>
             <SectionPokemon species="kyurem" />

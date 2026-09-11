@@ -2,6 +2,7 @@ import React from "react";
 import { Award, Sparkles, CheckCircle2, Lock } from "lucide-react";
 import PokeBall from "./PokeBall";
 import SectionPokemon from "./AmbientPokemon";
+import TypewriterTitle from "./TypewriterTitle";
 
 const BADGES = [
   { 
@@ -50,9 +51,10 @@ export default function Badges() {
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
               <Award className="w-5 h-5 text-poke-yellow animate-bounce" />
-              <h2 className="press-start text-xs sm:text-sm md:text-base text-white tracking-wide">
-                BADGES & CERTS
-              </h2>
+              <TypewriterTitle
+                text="BADGES & CERTS"
+                className="press-start text-xs sm:text-sm md:text-base text-white tracking-wide"
+              />
               <PokeBall size={22} variant="master" />
             </div>
             <SectionPokemon species="dialga" />

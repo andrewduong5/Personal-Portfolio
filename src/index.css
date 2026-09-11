@@ -93,6 +93,22 @@ html {
   pointer-events: none;
 }
 
+/* Retro dialogue banner entrance */
+@keyframes screenSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-screenSlideUp {
+  animation: screenSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* Crisp rendering for retro pixel art */
 .image-pixelated {
   image-rendering: pixelated;
@@ -101,11 +117,11 @@ html {
 }
 
 /* ============================================================
-   CINEMATIC RETRO SCREEN TRANSITIONS (Smooth In & Out)
+   CINEMATIC RETRO SCREEN TRANSITIONS (Paced at 0.7s)
    ============================================================ */
 
 .screen-wrapper {
-  transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: opacity, transform;
 }
 
@@ -116,20 +132,20 @@ html {
 
 .screen-exit-to-next {
   opacity: 0;
-  transform: translateY(-24px) scale(0.985);
+  transform: translateY(-28px) scale(0.985);
 }
 
 .screen-exit-to-prev {
   opacity: 0;
-  transform: translateY(24px) scale(0.985);
+  transform: translateY(28px) scale(0.985);
 }
 
 .screen-enter-from-next {
   opacity: 0;
-  transform: translateY(28px) scale(0.985);
+  transform: translateY(32px) scale(0.985);
 }
 
 .screen-enter-from-prev {
   opacity: 0;
-  transform: translateY(-28px) scale(0.985);
+  transform: translateY(-32px) scale(0.985);
 }

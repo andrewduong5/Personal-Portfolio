@@ -3,6 +3,7 @@ import { User, ShieldCheck, MapPin, Zap } from "lucide-react";
 import PokeBall from "./PokeBall";
 import TrainerCard from "./TrainerCard";
 import SectionPokemon from "./AmbientPokemon";
+import TypewriterTitle from "./TypewriterTitle";
 
 export default function TrainerProfile() {
   return (
@@ -24,9 +25,10 @@ export default function TrainerProfile() {
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
               <User className="w-5 h-5 text-poke-red animate-pulse" />
-              <h2 className="press-start text-xs sm:text-sm md:text-base text-white tracking-wide">
-                TRAINER PROFILE
-              </h2>
+              <TypewriterTitle
+                text="TRAINER PROFILE"
+                className="press-start text-xs sm:text-sm md:text-base text-white tracking-wide"
+              />
               <PokeBall size={20} variant="great" />
             </div>
             <SectionPokemon species="groudon" />

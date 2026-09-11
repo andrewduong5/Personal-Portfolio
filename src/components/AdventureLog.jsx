@@ -2,6 +2,7 @@ import React from "react";
 import { Briefcase } from "lucide-react";
 import PokeBall from "./PokeBall";
 import SectionPokemon from "./AmbientPokemon";
+import TypewriterTitle from "./TypewriterTitle";
 
 const EXPERIENCE = [
   {
@@ -47,9 +48,10 @@ export default function AdventureLog() {
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
               <Briefcase className="w-5 h-5 text-poke-yellow" />
-              <h2 className="press-start text-xs sm:text-sm md:text-base text-white tracking-wide">
-                ADVENTURE LOG
-              </h2>
+              <TypewriterTitle
+                text="ADVENTURE LOG"
+                className="press-start text-xs sm:text-sm md:text-base text-white tracking-wide"
+              />
               <PokeBall size={20} variant="ultra" />
             </div>
             <SectionPokemon species="kyogre" />

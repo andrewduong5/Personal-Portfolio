@@ -2,6 +2,7 @@ import React from "react";
 import { FolderGit2 } from "lucide-react";
 import PokeBall from "./PokeBall";
 import SectionPokemon from "./AmbientPokemon";
+import TypewriterTitle from "./TypewriterTitle";
 
 const PROJECTS = [
   {
@@ -35,9 +36,10 @@ export default function FieldNotes() {
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
               <FolderGit2 className="w-5 h-5 text-poke-blue" />
-              <h2 className="press-start text-xs sm:text-sm md:text-base text-white tracking-wide">
-                FIELD NOTES
-              </h2>
+              <TypewriterTitle
+                text="FIELD NOTES"
+                className="press-start text-xs sm:text-sm md:text-base text-white tracking-wide"
+              />
               <PokeBall size={20} variant="friend" />
             </div>
             <SectionPokemon species="rayquaza" />
