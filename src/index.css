@@ -4,6 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
 @layer utilities {
   .press-start {
     font-family: 'Press Start 2P', monospace;
@@ -13,29 +18,100 @@
   }
 }
 
+/* Authentic retro scanline texture */
 .scanline {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   pointer-events: none;
   z-index: 50;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.22) 50%);
   background-size: 100% 4px;
 }
 
+/* Ambient floating physics */
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1.5deg); }
 }
 
 .animate-float {
-  animation: float 3s ease-in-out infinite;
+  animation: float 4s ease-in-out infinite;
 }
 
+/* Retro arcade blinking cue */
 @keyframes press-flash {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+  50% { opacity: 0.35; }
 }
 
 .animate-press-flash {
-  animation: press-flash 1.5s ease-in-out infinite;
+  animation: press-flash 1.2s steps(2, start) infinite;
+}
+
+/* Continuous background grid motion */
+@keyframes grid-drift {
+  0% { background-position: 0 0; }
+  100% { background-position: 48px 48px; }
+}
+
+.animate-grid-drift {
+  animation: grid-drift 22s linear infinite;
+}
+
+/* Radial pulse for items & Pokédex elements */
+@keyframes poke-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.35)) drop-shadow(0 0 35px rgba(239, 68, 68, 0.15));
+  }
+  50% {
+    filter: drop-shadow(0 0 25px rgba(239, 68, 68, 0.65)) drop-shadow(0 0 55px rgba(250, 204, 21, 0.25));
+  }
+}
+
+.animate-poke-glow {
+  animation: poke-glow 3.5s ease-in-out infinite;
+}
+
+/* Holographic sheen across badges and cards */
+@keyframes shine {
+  0% { transform: translateX(-150%); }
+  100% { transform: translateX(250%); }
+}
+
+.badge-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.badge-shine::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: skewX(-25deg);
+  animation: shine 4.5s infinite;
+  pointer-events: none;
+}
+
+/* Global Game Boy / Arcade Card Interactive Hover */
+.game-card {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.game-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px -10px rgba(239, 68, 68, 0.25), 0 0 15px rgba(255, 255, 255, 0.05);
+}
+
+/* Dynamic Section Entry Transition */
+.section-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.section-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
