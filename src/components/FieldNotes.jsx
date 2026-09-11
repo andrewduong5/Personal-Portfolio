@@ -1,6 +1,7 @@
 import React from "react";
 import { FolderGit2 } from "lucide-react";
 import PokeBall from "./PokeBall";
+import SectionPokemon from "./AmbientPokemon";
 
 const PROJECTS = [
   {
@@ -21,18 +22,25 @@ const PROJECTS = [
 
 export default function FieldNotes() {
   return (
-    <section id="projects" className="py-24 bg-[#0A0A0A] relative overflow-hidden">
+    <section id="projects" className="py-16 sm:py-24 bg-[#0A0A0A] relative overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-white/10" aria-hidden="true" />
-      <div className="max-w-5xl mx-auto px-6">
-        <div className="mb-16">
+      <div className="max-w-5xl mx-auto px-6 relative z-10">
+        {/* Section header */}
+        <div className="mb-12 sm:mb-16">
           <div className="flex items-center gap-4 mb-3" aria-hidden="true">
             <div className="h-px flex-1 bg-white/10" />
             <span className="geist-mono text-[9px] text-poke-yellow tracking-widest">SECTION 03</span>
           </div>
-          <div className="flex items-center gap-3">
-            <FolderGit2 className="w-5 h-5 text-poke-blue" />
-            <h2 className="press-start text-sm md:text-base text-white tracking-wide">FIELD NOTES</h2>
-            <PokeBall size={20} variant="friend" />
+
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
+              <FolderGit2 className="w-5 h-5 text-poke-blue" />
+              <h2 className="press-start text-xs sm:text-sm md:text-base text-white tracking-wide">
+                FIELD NOTES
+              </h2>
+              <PokeBall size={20} variant="friend" />
+            </div>
+            <SectionPokemon species="rayquaza" />
           </div>
         </div>
 
@@ -40,7 +48,7 @@ export default function FieldNotes() {
           {PROJECTS.map((p) => (
             <div
               key={p.title}
-              className="border border-white/15 p-6 relative hover:border-poke-blue/50 transition-all group cursor-pointer"
+              className="border border-white/15 bg-white/[0.015] p-6 relative hover:border-poke-blue/50 transition-all rounded-sm group cursor-pointer"
             >
               <div className="flex items-center justify-between mb-3">
                 <span className="geist-mono text-[9px] text-white/40 tracking-widest">

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Database, Cloud, Target, Sparkles, Activity } from "lucide-react";
 import PokeBall from "./PokeBall";
+import SectionPokemon from "./AmbientPokemon";
 import {
   PythonIcon, SqlIcon, JavaScriptIcon, CppIcon, PowerShellIcon,
   AwsIcon, ProxmoxIcon, DockerIcon, WindowsIcon, LinuxIcon,
@@ -45,30 +46,35 @@ export default function SkillDex() {
   const meta = CAT_META[active.cat];
 
   return (
-    <section id="skills" className="py-24 bg-[#0D0D0D] relative overflow-hidden">
+    <section id="skills" className="py-16 sm:py-24 bg-[#0D0D0D] relative overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" aria-hidden="true" />
-      
-      {/* Background neon glow */}
       <div className="absolute top-1/2 -left-32 w-80 h-80 bg-poke-red/5 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="max-w-5xl mx-auto px-6 relative z-10">
-        <div className="mb-16">
+        {/* Section header */}
+        <div className="mb-12 sm:mb-16">
           <div className="flex items-center gap-4 mb-3" aria-hidden="true">
             <div className="h-px flex-1 bg-white/10" />
-            <span className="geist-mono text-[9px] text-poke-yellow tracking-widest flex items-center gap-1.5">
+            <span className="geist-mono text-[9px] text-poke-yellow tracking-widest flex items-center gap-1">
               <Sparkles size={11} className="animate-spin text-poke-yellow" />
               SECTION 04
             </span>
           </div>
-          <div className="flex items-center gap-3">
-            <Database className="w-5 h-5 text-poke-red animate-pulse" />
-            <h2 className="press-start text-sm md:text-base text-white tracking-wide">SKILL-DEX DATABASE</h2>
-            <div className="hover:rotate-180 transition-transform duration-500 cursor-pointer">
-              <PokeBall size={22} variant={meta.ball} />
+
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
+              <Database className="w-5 h-5 text-poke-red animate-pulse" />
+              <h2 className="press-start text-xs sm:text-sm md:text-base text-white tracking-wide">
+                SKILL-DEX
+              </h2>
+              <div className="hover:rotate-180 transition-transform duration-500 cursor-pointer">
+                <PokeBall size={22} variant={meta.ball} />
+              </div>
             </div>
+            <SectionPokemon species="mewtwo" />
           </div>
-          <p className="geist-mono text-[11px] text-white/40 mt-3 ml-8">
-            Select an entry below to analyze stats & proficiencies
+          <p className="geist-mono text-[10px] sm:text-[11px] text-white/40 mt-2">
+            Select an entry below to inspect stats & experience
           </p>
         </div>
 
@@ -95,7 +101,7 @@ export default function SkillDex() {
                       <button
                         key={s.name}
                         onClick={() => setActive({ cat, idx: i })}
-                        className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-sm border transition-all duration-300 transform active:scale-95 ${
+                        className={`flex items-center gap-2.5 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-sm border transition-all duration-300 transform active:scale-95 cursor-pointer ${
                           isSelected
                             ? `${m.border} bg-white/10 ${m.glow} translate-y-[-2px] text-white`
                             : "border-white/15 bg-white/[0.02] text-white/70 hover:border-white/40 hover:bg-white/[0.06] hover:text-white"
@@ -118,33 +124,30 @@ export default function SkillDex() {
         </div>
 
         {/* Active Pokédex Screen Detail */}
-        <div className={`mt-10 border-2 ${meta.border} bg-[#0A0A0A] p-6 relative rounded-sm shadow-[0_0_30px_rgba(0,0,0,0.8)] transition-all duration-500 overflow-hidden`}>
-          {/* Subtle animated scanline */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.03] to-transparent h-16 w-full animate-grid-drift pointer-events-none" />
-
+        <div className={`mt-10 border-2 ${meta.border} bg-[#0A0A0A] p-5 sm:p-6 relative rounded-sm shadow-[0_0_30px_rgba(0,0,0,0.8)] transition-all duration-500 overflow-hidden`}>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 relative z-10">
             <div className="flex items-start gap-4 flex-1">
               <div className="shrink-0 border-2 border-white/20 p-3.5 bg-black/80 shadow-inner rounded-sm relative group">
-                <current.Icon size={34} className="text-white transform group-hover:scale-110 transition-transform duration-300" />
+                <current.Icon size={32} className="text-white transform group-hover:scale-110 transition-transform duration-300" />
                 <div className="absolute -top-1 -right-1 w-2 h-2 bg-poke-red rounded-full animate-ping" />
               </div>
 
               <div className="flex-1">
-                <div className="flex flex-wrap items-center gap-2.5 mb-2">
+                <div className="flex flex-wrap items-center gap-2 mb-2">
                   <span className={`press-start text-[7px] ${meta.color} border ${meta.border} px-2.5 py-1 bg-white/[0.03]`}>
                     TYPE: {active.cat}
                   </span>
                   <span className="geist-mono text-[10px] text-poke-yellow font-bold uppercase tracking-wider flex items-center gap-1">
                     <Activity size={12} /> LVL.{current.power}
                   </span>
-                  <h3 className="press-start text-sm sm:text-base text-white tracking-wide">{current.name}</h3>
+                  <h3 className="press-start text-xs sm:text-sm text-white tracking-wide">{current.name}</h3>
                 </div>
 
                 <p className="geist-mono text-xs sm:text-sm text-white/75 leading-relaxed max-w-xl">
                   {current.desc}
                 </p>
 
-                {/* HP/EXP Stat Bar */}
+                {/* EXP Stat Bar */}
                 <div className="mt-4 max-w-md">
                   <div className="flex justify-between items-center mb-1.5">
                     <span className="press-start text-[7px] text-white/40">PROFICIENCY EXP</span>
@@ -161,7 +164,7 @@ export default function SkillDex() {
             </div>
 
             <div className="hidden lg:flex flex-col items-center justify-center pl-6 border-l border-white/10">
-              <PokeBall size={48} variant={meta.ball} glow className="animate-float" />
+              <PokeBall size={44} variant={meta.ball} glow className="animate-float" />
               <span className="press-start text-[7px] text-white/30 mt-3 tracking-widest">DATA SCAN</span>
             </div>
           </div>

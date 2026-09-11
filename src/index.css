@@ -93,25 +93,43 @@ html {
   pointer-events: none;
 }
 
-/* Global Game Boy / Arcade Card Interactive Hover */
-.game-card {
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+/* Crisp rendering for retro pixel art */
+.image-pixelated {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
 
-.game-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 30px -10px rgba(239, 68, 68, 0.25), 0 0 15px rgba(255, 255, 255, 0.05);
-}
+/* ============================================================
+   CINEMATIC RETRO SCREEN TRANSITIONS (Smooth In & Out)
+   ============================================================ */
 
-/* Dynamic Section Entry Transition */
-.section-reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+.screen-wrapper {
+  transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   will-change: opacity, transform;
 }
 
-.section-reveal.is-visible {
+.screen-active {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+}
+
+.screen-exit-to-next {
+  opacity: 0;
+  transform: translateY(-24px) scale(0.985);
+}
+
+.screen-exit-to-prev {
+  opacity: 0;
+  transform: translateY(24px) scale(0.985);
+}
+
+.screen-enter-from-next {
+  opacity: 0;
+  transform: translateY(28px) scale(0.985);
+}
+
+.screen-enter-from-prev {
+  opacity: 0;
+  transform: translateY(-28px) scale(0.985);
 }
