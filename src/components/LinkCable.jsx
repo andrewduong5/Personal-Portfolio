@@ -42,7 +42,7 @@ export default function LinkCable() {
               />
               <PokeBall size={20} variant="dive" />
             </div>
-            <SectionPokemon species="kyurem" />
+            <SectionPokemon species="Shiny Mega Lucario" />
           </div>
           <p className="geist-mono text-[10px] text-white/40 mt-2">
             COMMUNICATION CENTER — INITIATE CONNECTION

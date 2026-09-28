@@ -42,7 +42,7 @@ export default function FieldNotes() {
               />
               <PokeBall size={20} variant="friend" />
             </div>
-            <SectionPokemon species="rayquaza" />
+            <SectionPokemon species="Shiny Mega Metagross" />
           </div>
         </div>
 

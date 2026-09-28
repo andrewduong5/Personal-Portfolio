@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Swords, Sparkles } from "lucide-react";
+import { ArrowDownRight, Sparkles, Terminal, Swords, Shield, MapPin, Play } from "lucide-react";
 import PokeBall from "./PokeBall";
 
 export default function Hero({ onStartClick }) {
@@ -18,166 +18,180 @@ export default function Hero({ onStartClick }) {
 
   const handleEncounter = () => {
     if (battleState !== "idle") return;
-
     setBattleState("summoning");
 
     setTimeout(() => {
       setBattleState("challenged");
       setTimeout(() => {
         handleStartTransition();
-      }, 1500);
-    }, 700);
+      }, 1200);
+    }, 600);
   };
 
   return (
     <section
       id="hero"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden bg-[#0A0A0A] screen-glass dither-overlay pt-20 select-none"
+      className="min-h-screen flex flex-col justify-between relative overflow-hidden bg-[#0A0A0A] text-white pt-24 pb-10 px-6 sm:px-12 select-none"
     >
-      {/* Animated Moving Retro Grid */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none" aria-hidden="true">
-        <div
-          className="w-full h-full animate-grid-drift"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(253,253,253,0.25) 1px, transparent 1px), linear-gradient(90deg, rgba(253,253,253,0.25) 1px, transparent 1px)",
-            backgroundSize: "48px 48px",
-          }}
-        />
-      </div>
+      {/* Subtle modern background grid */}
+      <div 
+        className="absolute inset-0 opacity-[0.07] pointer-events-none" 
+        style={{
+          backgroundImage:
+            "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
+          backgroundSize: "64px 64px",
+        }}
+        aria-hidden="true" 
+      />
 
-      {/* Radial backlight spotlight */}
+      {/* Gentle ambient gradient orb */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-poke-red/10 rounded-full blur-[120px] pointer-events-none"
+        className="absolute top-1/4 right-1/4 w-[480px] h-[480px] bg-poke-red/10 rounded-full blur-[140px] pointer-events-none"
         aria-hidden="true"
       />
 
-      {/* Floating particles */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        {[
-          { l: "12%", t: "18%", c: "bg-poke-red" },
-          { l: "22%", t: "38%", c: "bg-poke-yellow" },
-          { l: "32%", t: "58%", c: "bg-poke-blue" },
-          { l: "48%", t: "78%", c: "bg-poke-red" },
-          { l: "62%", t: "22%", c: "bg-poke-yellow" },
-          { l: "74%", t: "42%", c: "bg-poke-blue" },
-          { l: "84%", t: "62%", c: "bg-poke-red" },
-          { l: "92%", t: "82%", c: "bg-poke-yellow" },
-        ].map((p, i) => (
-          <div
-            key={i}
-            className={`absolute w-1.5 h-1.5 rounded-sm ${p.c} opacity-60 animate-float shadow-[0_0_8px_currentColor]`}
-            style={{ left: p.l, top: p.t, animationDelay: `${i * 0.4}s` }}
-          />
-        ))}
+      {/* Top Editorial Status Bar */}
+      <div className="max-w-6xl w-full mx-auto flex items-center justify-between border-b border-white/10 pb-4 text-[11px] geist-mono text-white/50 tracking-wider">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-white/80 font-medium">TRAINER ID: #02026</span>
+          <span className="text-white/30 hidden sm:inline">|</span>
+          <span className="hidden sm:inline text-white/50">SYS.VER 3.5</span>
+        </div>
+
+        <div className="flex items-center gap-6">
+          <span className="hidden md:flex items-center gap-1.5 text-poke-yellow">
+            <MapPin size={12} /> VENTURA, CA · UCR ALUM
+          </span>
+          <span className="press-start text-[8px] text-poke-red tracking-widest uppercase">
+            STOP 01 // ROSTER
+          </span>
+        </div>
       </div>
 
-      <div className="text-center z-10 px-6 max-w-xl mx-auto">
-        {/* Interactive Pokéball Throw / Summon */}
-        <div className="flex flex-col items-center justify-center mb-6">
-          <div
-            onClick={handleEncounter}
-            className={`cursor-pointer select-none transition-transform duration-300 relative ${
-              battleState === "idle" ? "hover:scale-110 active:scale-95" : ""
-            }`}
-            title={battleState === "idle" ? "Click to initiate battle!" : ""}
-            aria-label="Initiate Trainer Battle"
-          >
-            {battleState !== "idle" && (
-              <div className="absolute -inset-4 pointer-events-none flex items-center justify-center">
-                <div className="w-28 h-28 bg-poke-red/40 rounded-full blur-xl animate-ping" />
-              </div>
-            )}
-
-            <div
-              className={`transition-all duration-500 ${
-                battleState === "idle"
-                  ? "animate-float animate-poke-glow"
-                  : battleState === "summoning"
-                  ? "scale-125 -translate-y-4 rotate-180 filter brightness-150 drop-shadow-[0_0_30px_rgba(239,68,68,1)]"
-                  : "scale-110 filter drop-shadow-[0_0_30px_rgba(250,204,21,0.9)]"
-              }`}
-            >
-              <PokeBall size={92} variant="poke" glow={battleState !== "idle"} />
-            </div>
+      {/* Main Hero Body: Split Editorial Layout */}
+      <div className="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center my-auto py-8">
+        
+        {/* Left Column: Clean, confident typography */}
+        <div className="lg:col-span-7 flex flex-col items-start text-left">
+          {/* Tag Pill */}
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/15 bg-white/[0.03] backdrop-blur-md mb-6">
+            <Sparkles size={11} className="text-poke-yellow" />
+            <span className="geist-mono text-[10px] sm:text-xs text-white/70 tracking-widest uppercase">
+              Cloud Infrastructure · Systems · Security
+            </span>
           </div>
 
-          {/* Cue indicator under Pokéball */}
-          <div className="h-7 mt-3 flex items-center justify-center">
-            {battleState === "idle" && (
-              <span className="press-start text-[7px] text-white/40 tracking-wider animate-pulse flex items-center gap-1.5">
-                <Swords size={11} className="text-poke-red" />
-                [ CLICK BALL TO INITIATE BATTLE ]
-              </span>
-            )}
-            {battleState === "summoning" && (
-              <span className="press-start text-[7px] text-poke-red tracking-widest animate-bounce">
-                ENTERING BATTLE...
-              </span>
-            )}
-            {battleState === "challenged" && (
-              <span className="press-start text-[8px] text-poke-yellow tracking-widest flex items-center gap-1.5 animate-pulse">
-                <Sparkles size={11} /> BATTLE COMMENCED!
-              </span>
-            )}
+          <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-[1.08] mb-4 text-white">
+            ANDREW <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/80 to-white/40">
+              DUONG.
+            </span>
+          </h1>
+
+          <p className="geist-mono text-sm sm:text-base text-white/65 max-w-lg leading-relaxed mb-8">
+            Information Systems specialist exploring scalable networks, distributed homelabs, and intelligent software systems. Designed with the precision of an engineer and the heart of a trainer.
+          </p>
+
+          {/* Action CTAs */}
+          <div className="flex flex-wrap items-center gap-4">
+            <button
+              type="button"
+              onClick={handleEncounter}
+              disabled={battleState !== "idle"}
+              className="group relative inline-flex items-center gap-3 px-6 py-3.5 bg-poke-red text-black font-semibold text-xs sm:text-sm rounded-full tracking-wide hover:bg-white hover:text-black transition-all duration-200 active:scale-95 shadow-[0_0_20px_rgba(239,68,68,0.35)] cursor-pointer"
+            >
+              <Play size={13} className="fill-current" />
+              <span>{battleState === "idle" ? "START ENCOUNTER" : "ENTERING BATTLE..."}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleStartTransition}
+              className="inline-flex items-center gap-2 px-5 py-3.5 rounded-full border border-white/15 hover:border-white/40 bg-white/[0.02] text-xs sm:text-sm geist-mono text-white/80 hover:text-white transition-all duration-200"
+            >
+              <span>EXPLORE WORK</span>
+              <ArrowDownRight size={14} className="text-white/50" />
+            </button>
           </div>
         </div>
 
-        {/* RPG Battle Dialogue Box */}
-        {battleState === "challenged" ? (
-          <div className="mb-6 p-5 border-2 border-poke-red bg-black/95 rounded-sm shadow-[0_0_30px_rgba(239,68,68,0.4)] animate-screenSlideUp text-left">
-            <div className="flex items-center gap-2 pb-2 mb-2 border-b border-white/10">
-              <span className="w-2 h-2 rounded-full bg-poke-red animate-ping" />
-              <p className="press-start text-[8px] text-poke-red tracking-widest">
-                VS. TRAINER ANDREW
-              </p>
-            </div>
-            <p className="geist-mono text-xs sm:text-sm text-white/95 leading-relaxed">
-              <span className="text-poke-yellow font-bold">Trainer ANDREW</span> wants to battle! Loading Trainer Card & Pokédex records...
-            </p>
-          </div>
-        ) : (
-          <>
-            {/* Version Badge */}
-            <div className="inline-flex items-center gap-3 justify-center mb-4 px-4 py-1 rounded-full border border-poke-red/40 bg-poke-red/5 backdrop-blur-sm relative overflow-hidden badge-shine">
-              <span className="w-2 h-2 rounded-full bg-poke-red animate-ping" />
-              <span className="press-start text-[8px] text-poke-red tracking-widest uppercase">TRAINER PROFILE v1.0</span>
+        {/* Right Column: Clean Interactive Pokéball Console */}
+        <div className="lg:col-span-5 flex flex-col items-center lg:items-end">
+          <div className="w-full max-w-[340px] bg-[#121212]/90 border border-white/15 rounded-2xl p-6 backdrop-blur-xl shadow-2xl relative group">
+            {/* Header info bar */}
+            <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-5">
+              <span className="press-start text-[8px] text-white/50 tracking-wider">
+                COMPANION DECK
+              </span>
+              <span className="geist-mono text-[10px] text-poke-yellow font-bold tracking-widest">
+                LVL. 99
+              </span>
             </div>
 
-            <h1 className="press-start text-lg sm:text-2xl text-white mb-4 leading-relaxed tracking-wider transition-colors hover:text-poke-yellow">
-              ANDREW DUONG
-            </h1>
-
-            <div className="inline-block px-3 py-1 mb-2 rounded bg-white/5 border border-white/10">
-              <p className="geist-mono text-white/80 text-xs sm:text-sm tracking-widest font-semibold">
-                INFORMATION SYSTEMS · CLOUD · AI
-              </p>
-            </div>
-
-            <p className="geist-mono text-poke-yellow text-xs mb-8 tracking-widest opacity-90">
-              ◆ REGION: UC RIVERSIDE ◆
-            </p>
-
-            {/* Press Start button */}
-            <div>
-              <button
-                type="button"
+            {/* Pokéball Stage with smooth organic hover */}
+            <div className="flex flex-col items-center py-4">
+              <div
                 onClick={handleEncounter}
-                className="group relative inline-flex items-center gap-2 press-start text-[11px] text-white px-8 py-4 border-2 border-poke-red/80 bg-black/60 hover:bg-poke-red hover:border-poke-red hover:text-black transition-colors duration-150 shadow-[0_0_15px_rgba(239,68,68,0.3)] hover:shadow-[0_0_25px_rgba(239,68,68,0.8)] active:scale-90 active:translate-y-0.5 cursor-pointer select-none"
-                aria-label="Start portfolio"
+                className={`relative cursor-pointer transition-all duration-500 ${
+                  battleState === "idle"
+                    ? "hover:scale-105 active:scale-95"
+                    : battleState === "summoning"
+                    ? "scale-115 rotate-12 brightness-125"
+                    : "scale-110"
+                }`}
+                title="Tap to challenge"
               >
-                <span className="animate-press-flash">▶</span>
-                <span>PRESS START</span>
-              </button>
+                {/* Glow ring */}
+                <div className="absolute -inset-3 bg-poke-red/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <PokeBall size={100} variant="poke" glow={battleState !== "idle"} />
+              </div>
+
+              {/* Status dialogue cue */}
+              <div className="mt-5 text-center">
+                {battleState === "idle" && (
+                  <p className="geist-mono text-xs text-white/60 group-hover:text-poke-yellow transition-colors">
+                    Click Pokéball to initiate battle
+                  </p>
+                )}
+                {battleState === "summoning" && (
+                  <p className="press-start text-[8px] text-poke-red tracking-widest animate-pulse">
+                    SUMMONING TRAINER...
+                  </p>
+                )}
+                {battleState === "challenged" && (
+                  <p className="press-start text-[8px] text-poke-yellow tracking-widest animate-bounce">
+                    BATTLE ENGAGED!
+                  </p>
+                )}
+              </div>
             </div>
-          </>
-        )}
+
+            {/* Spec tags at bottom */}
+            <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-white/10 geist-mono text-[10px]">
+              <div className="flex items-center gap-1.5 text-white/50">
+                <Shield size={11} className="text-poke-blue" />
+                <span>SPEC: SYS_ENG</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-white/50 justify-end">
+                <Terminal size={11} className="text-poke-yellow" />
+                <span>STACK: REACT/AWS</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
-      {/* Retro HUD prompt indicator */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 hidden md:flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity">
-        <span className="geist-mono text-[9px] text-white/40 tracking-widest">USE HUD CONTROLLER OR KEYS</span>
-        <div className="w-0.5 h-6 bg-gradient-to-b from-poke-red via-poke-yellow to-transparent animate-bounce" />
+      {/* Bottom Footer Ribbon */}
+      <div className="max-w-6xl w-full mx-auto flex items-center justify-between border-t border-white/10 pt-4 text-[10px] geist-mono text-white/40">
+        <div className="flex items-center gap-3">
+          <span className="w-1.5 h-1.5 bg-poke-red rounded-full" />
+          <span>SCROLL TO READ DOSSIER</span>
+        </div>
+        <div className="hidden sm:flex items-center gap-4 tracking-widest">
+          <span>[ ↓ ARCHITECTURE & BATTLE ARENA ]</span>
+        </div>
       </div>
     </section>
   );

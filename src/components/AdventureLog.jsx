@@ -23,7 +23,7 @@ const EXPERIENCE = [
     typeColor: "text-poke-yellow border-poke-yellow/50",
     title: "BIIGHT DENTAL",
     role: "Account Manager",
-    period: "Dec 2024 — Present",
+    period: "Dec 2024 — Sep 2026",
     location: "Las Vegas, NV (Remote)",
     points: [
       "Spearheaded account management for a 3-client portfolio, growing from $100K to $250K annual revenue — a 150% growth rate.",
@@ -54,7 +54,7 @@ export default function AdventureLog() {
               />
               <PokeBall size={20} variant="ultra" />
             </div>
-            <SectionPokemon species="kyogre" />
+            <SectionPokemon species="Shiny Rotom" />
           </div>
         </div>
 

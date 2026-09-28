@@ -57,7 +57,7 @@ export default function Badges() {
               />
               <PokeBall size={22} variant="master" />
             </div>
-            <SectionPokemon species="dialga" />
+            <SectionPokemon species="Shiny Magnezone" />
           </div>
         </div>
 

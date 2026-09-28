@@ -73,7 +73,7 @@ export default function SkillDex() {
                 <PokeBall size={22} variant={meta.ball} />
               </div>
             </div>
-            <SectionPokemon species="mewtwo" />
+            <SectionPokemon species="Shiny Mega Alakazam" />
           </div>
           <p className="geist-mono text-[10px] sm:text-[11px] text-white/40 mt-2">
             Select an entry below to inspect stats & experience
