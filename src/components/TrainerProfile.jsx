@@ -532,7 +532,7 @@ export default function TrainerProfile() {
             <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
               <User className="w-5 h-5 text-poke-red animate-pulse" />
               <TypewriterTitle
-                text="TRAINER DOSSIER & PROFILE"
+                text="TRAINER PROFILE"
                 className="press-start text-xs sm:text-sm md:text-base text-white tracking-wide"
               />
               <PokeBall size={20} variant="great" />
