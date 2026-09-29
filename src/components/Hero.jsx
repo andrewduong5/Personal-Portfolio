@@ -1,29 +1,139 @@
-import React, { useState, useEffect } from "react";
-import { ArrowRight, Cpu, Globe, Terminal, ShieldCheck } from "lucide-react";
-import PokeBall from "./PokeBall";
+import React, { useRef, useEffect, useState } from "react";
+import { ArrowRight, Terminal } from "lucide-react";
 
-export default function Hero({ onStartClick }) {
-  const [time, setTime] = useState("");
+// TCG Pocket Holographic Overlay Component
+function GoldCard() {
+  const cardRef = useRef(null);
+  const [isHovered, setIsHovered] = useState(false);
 
-  // Live clock for that precise, technical Elaine Yu feel
   useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      setTime(
-        now.toLocaleTimeString("en-US", {
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-          hour12: true,
-        })
-      );
+    const card = cardRef.current;
+    if (!card) return;
+
+    const handleMouseMove = (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -25;
+      const rotateY = ((x - centerX) / centerX) * 25;
+
+      const px = (x / rect.width) * 100;
+      const py = (y / rect.height) * 100;
+
+      card.style.setProperty("--rx", `${rotateX}deg`);
+      card.style.setProperty("--ry", `${rotateY}deg`);
+      card.style.setProperty("--px", `${px}%`);
+      card.style.setProperty("--py", `${py}%`);
+      card.style.setProperty("--opacity", "1");
     };
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
+
+    const handleMouseEnter = () => setIsHovered(true);
+
+    const handleMouseLeave = () => {
+      setIsHovered(false);
+      card.style.setProperty("--rx", "0deg");
+      card.style.setProperty("--ry", "0deg");
+      card.style.setProperty("--opacity", "0");
+      card.style.setProperty("--px", "50%");
+      card.style.setProperty("--py", "50%");
+    };
+
+    card.addEventListener("mousemove", handleMouseMove);
+    card.addEventListener("mouseenter", handleMouseEnter);
+    card.addEventListener("mouseleave", handleMouseLeave);
+    
+    card.style.setProperty("--rx", "0deg");
+    card.style.setProperty("--ry", "0deg");
+    card.style.setProperty("--opacity", "0");
+    card.style.setProperty("--px", "50%");
+    card.style.setProperty("--py", "50%");
+
+    return () => {
+      card.removeEventListener("mousemove", handleMouseMove);
+      card.removeEventListener("mouseenter", handleMouseEnter);
+      card.removeEventListener("mouseleave", handleMouseLeave);
+    };
   }, []);
 
-  const handleStart = () => {
+  return (
+    <div className="perspective-[1500px] w-full max-w-[340px] aspect-[2.5/3.5] mx-auto z-20 group">
+      <div
+        ref={cardRef}
+        className="w-full h-full relative rounded-[18px] cursor-pointer preserve-3d transition-[transform,box-shadow] duration-[100ms] ease-out shadow-2xl"
+        style={{
+          transform: "rotateX(var(--rx)) rotateY(var(--ry))",
+          boxShadow: "0 25px 50px -12px rgba(0,0,0,0.8), calc(var(--ry) * -1px) calc(var(--rx) * 1px) 25px rgba(250, 204, 21, 0.4)",
+        }}
+      >
+        <img 
+          src="/GoldCard.avif" 
+          alt="Mew ex Gold Secret Rare" 
+          className="absolute inset-0 w-full h-full object-cover rounded-[18px]"
+        />
+
+        {/* IDLE SHINE LAYER */}
+        <div
+          className={`absolute inset-0 rounded-[18px] pointer-events-none mix-blend-color-dodge transition-opacity duration-700 z-10 ${
+            isHovered ? "opacity-0" : "opacity-100"
+          }`}
+          style={{
+            background: `linear-gradient(
+              105deg,
+              transparent 10%,
+              rgba(255, 255, 255, 0.4) 20%,
+              rgba(255, 230, 100, 0.8) 40%,
+              rgba(255, 255, 255, 0.4) 60%,
+              transparent 70%
+            )`,
+            backgroundSize: "200% 100%",
+            animation: "idleShine 6s linear infinite",
+          }}
+        />
+
+        {/* GLARE LAYER */}
+        <div
+          className="absolute inset-0 rounded-[18px] pointer-events-none transition-opacity duration-300 mix-blend-color-dodge z-10"
+          style={{
+            opacity: "var(--opacity, 0)",
+            background: `
+              radial-gradient(
+                farthest-corner circle at var(--px) var(--py), 
+                rgba(255, 255, 255, 0.95) 0%, 
+                rgba(255, 255, 255, 0.3) 20%, 
+                transparent 50%
+              ),
+              linear-gradient(
+                115deg, 
+                transparent 0%, 
+                rgba(255, 100, 150, 0.6) calc(var(--px) - 25%), 
+                rgba(255, 255, 100, 0.8) calc(var(--px) - 10%), 
+                rgba(100, 200, 255, 0.8) calc(var(--px)), 
+                rgba(100, 200, 255, 0.6) calc(var(--px) + 10%), 
+                transparent calc(var(--px) + 30%)
+              )
+            `
+          }}
+        />
+
+        {/* DIAGONAL TEXTURE */}
+        <div 
+          className="absolute inset-0 rounded-[18px] pointer-events-none mix-blend-overlay transition-opacity duration-300 z-20"
+          style={{
+            opacity: "calc(var(--opacity, 0) * 0.4)",
+            backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255,255,255,0.4) 3px, rgba(255,255,255,0.4) 4px)"
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+// Main Hero Layout
+export default function Hero({ onStartClick }) {
+  const handleStartTransition = () => {
     if (onStartClick) {
       onStartClick();
     } else {
@@ -37,73 +147,103 @@ export default function Hero({ onStartClick }) {
   return (
     <section
       id="hero"
-      className="min-h-screen flex flex-col justify-between bg-[#0A0A0A] text-white px-6 sm:px-12 md:px-20 pt-28 pb-12 overflow-hidden selection:bg-white selection:text-black relative"
+      className="min-h-screen flex items-center bg-[#0A0A0A] text-white pt-20 pb-10 px-6 sm:px-12 relative overflow-hidden selection:bg-white selection:text-black"
     >
-      {/* Absolute Minimalist Grid */}
-      <div 
-        className="absolute inset-0 pointer-events-none opacity-[0.03]"
-        style={{
-          backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
-          backgroundSize: "100px 100px",
-        }}
-        aria-hidden="true"
-      />
+      <style>
+        {`
+          @keyframes blurReveal {
+            0% { opacity: 0; transform: translateY(15px); filter: blur(8px); }
+            100% { opacity: 1; transform: translateY(0); filter: blur(0px); }
+          }
+          .animate-reveal {
+            opacity: 0;
+            animation: blurReveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+          }
 
-      {/* Ambient Light Wash */}
-      <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-white/[0.02] rounded-full blur-[150px] pointer-events-none" />
+          @keyframes idleShine {
+            0% { background-position: -200% 0%; }
+            100% { background-position: 200% 0%; }
+          }
 
-      {/* Top Telemetry Bar */}
-      <div className="w-full max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-6 text-[10px] geist-mono text-neutral-400 tracking-widest uppercase">
-        <div className="flex items-center gap-4">
-          <span className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-poke-red animate-pulse" />
-            SYS.ONLINE
-          </span>
-          <span className="hidden sm:inline text-neutral-700">|</span>
-          <span className="hidden sm:flex items-center gap-1.5">
-            <Globe size={12} className="text-neutral-500" />
-            VENTURA, CA
-          </span>
-        </div>
+          /* Faster, smooth sweep for the metallic text */
+          @keyframes textGlistenSweep {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
+          }
+          .animate-infinite-glisten {
+            background-image: linear-gradient(
+              90deg,
+              #ffffff 0%,
+              #ffffff 30%,
+              #a3a3a3 40%,
+              #facc15 50%,
+              #a3a3a3 60%,
+              #ffffff 70%,
+              #ffffff 100%
+            );
+            background-size: 200% auto;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            animation: textGlistenSweep 7s linear infinite;
+          }
 
-        <div className="flex items-center gap-6">
-          <span>{time || "00:00:00"}</span>
-          <span className="px-2 py-1 border border-white/10 rounded-sm text-neutral-300">
-            ID: 02026
-          </span>
-        </div>
+          /* Gentle breathing opacity */
+          @keyframes pulseSoftOpacity {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+          }
+          .animate-infinite-pulse {
+            animation: pulseSoftOpacity 6s ease-in-out infinite;
+          }
+        `}
+      </style>
+
+      <div className="absolute inset-0 pointer-events-none opacity-[0.04]">
+        <div className="w-full h-full bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] bg-[size:40px_40px]" />
       </div>
 
-      {/* Main Content Split */}
-      <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center my-auto py-12 relative z-10">
+      <div className="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10 py-10">
         
-        {/* Left Column: Massive, Clean Typography */}
         <div className="lg:col-span-7 flex flex-col items-start">
           
-          <div className="inline-flex items-center gap-2 mb-8">
-            <Terminal size={14} className="text-poke-yellow" />
-            <span className="geist-mono text-[11px] text-neutral-400 tracking-widest uppercase">
-              Information Systems Engineer
+          <div 
+            className="animate-reveal inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full border border-white/20 bg-white/[0.05] mb-6 backdrop-blur-md"
+            style={{ animationDelay: "0.1s" }}
+          >
+            <Terminal size={12} className="text-white" />
+            <span className="geist-mono text-[11px] text-white/90 tracking-widest uppercase font-semibold">
+              Systems & Infrastructure
             </span>
           </div>
 
-          <h1 className="text-5xl sm:text-7xl lg:text-[5.5rem] font-medium tracking-tighter leading-[1.05] text-white mb-8">
-            ANDREW <br />
-            <span className="text-neutral-500 hover:text-white transition-colors duration-700">
-              DUONG.
+          <h1 className="text-5xl sm:text-7xl lg:text-[5.5rem] font-black tracking-tight mb-6 leading-[1.05]">
+            <span className="animate-reveal block" style={{ animationDelay: "0.2s" }}>
+              ANDREW
+            </span>
+            {/* WRAPPED: Now the reveal animation and the glisten animation are on separate layers! */}
+            <span className="animate-reveal block" style={{ animationDelay: "0.3s" }}>
+              <span className="animate-infinite-glisten block">
+                DUONG.
+              </span>
             </span>
           </h1>
 
-          <p className="geist-mono text-sm sm:text-base text-neutral-400 max-w-md leading-relaxed mb-10">
-            Bridging the gap between secure cloud infrastructure and scalable network automation. Designing high-performance systems with the precision of an engineer and the discipline of a trainer.
-          </p>
+          {/* WRAPPED: Same here, reveal is on the div, pulse is on the paragraph */}
+          <div className="animate-reveal max-w-lg mb-10" style={{ animationDelay: "0.4s" }}>
+            <p className="animate-infinite-pulse geist-mono text-sm sm:text-base text-white/90 leading-relaxed">
+              Information Systems specialist exploring scalable networks, distributed homelabs, and intelligent software systems. Designed with the precision of an engineer and the heart of a trainer.
+            </p>
+          </div>
 
           <button
-            onClick={handleStart}
-            className="group flex items-center gap-4 px-8 py-4 bg-white text-black rounded-full hover:bg-neutral-200 transition-all duration-300 active:scale-95"
+            onClick={handleStartTransition}
+            className="animate-reveal group flex items-center gap-4 px-8 py-4 bg-white text-black rounded-full hover:bg-neutral-200 hover:shadow-[0_0_30px_rgba(255,255,255,0.15)] transition-all duration-300 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+            style={{ animationDelay: "0.5s" }}
           >
-            <span className="geist-mono text-xs font-bold tracking-widest uppercase">
-              Explore Profile
+            <span className="geist-mono text-xs font-bold tracking-[0.15em] uppercase">
+              Explore Work
             </span>
             <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center group-hover:translate-x-1 transition-transform">
               <ArrowRight size={14} className="text-white" />
@@ -111,85 +251,13 @@ export default function Hero({ onStartClick }) {
           </button>
         </div>
 
-        {/* Right Column: The "Glass Trainer Badge" Concept */}
-        <div className="lg:col-span-5 flex justify-center lg:justify-end perspective-1000">
-          {/* 
-            This represents a modern, high-tech Trainer Card / Employee Badge.
-            No sprites. Pure typography, glassmorphism, and structural design.
-          */}
-          <div className="w-full max-w-[360px] aspect-[3/4] relative group animate-float">
-            
-            {/* Holographic glow behind the card */}
-            <div className="absolute -inset-1 bg-gradient-to-tr from-poke-red/20 via-transparent to-poke-blue/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-            
-            {/* The Physical Card */}
-            <div className="absolute inset-0 bg-white/[0.03] backdrop-blur-xl border border-white/[0.12] rounded-2xl p-6 flex flex-col justify-between overflow-hidden shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]">
-              
-              {/* Giant faint Pokéball watermark */}
-              <div className="absolute -bottom-10 -right-10 opacity-5 pointer-events-none">
-                <PokeBall size={240} variant="poke" />
-              </div>
-
-              {/* Card Header */}
-              <div className="flex justify-between items-start relative z-10">
-                <div className="w-10 h-10 rounded-lg border border-white/20 bg-white/5 flex items-center justify-center">
-                  <Cpu size={20} className="text-neutral-300" />
-                </div>
-                <div className="text-right">
-                  <p className="geist-mono text-[9px] text-neutral-500 tracking-widest uppercase">
-                    Clearance Level
-                  </p>
-                  <p className="geist-mono text-xs text-white font-bold tracking-wider mt-0.5">
-                    LVL. 99
-                  </p>
-                </div>
-              </div>
-
-              {/* Card Mid-Section: Trainer Name & Specs */}
-              <div className="relative z-10 mt-auto mb-8">
-                <div className="flex items-center gap-2 mb-2">
-                  <ShieldCheck size={14} className="text-poke-blue" />
-                  <span className="geist-mono text-[10px] text-poke-blue tracking-widest uppercase font-semibold">
-                    Verified Trainer
-                  </span>
-                </div>
-                <h2 className="text-3xl font-semibold tracking-tight text-white mb-1">
-                  Andrew Duong
-                </h2>
-                <p className="geist-mono text-[11px] text-neutral-400 tracking-widest uppercase">
-                  B.S. Information Systems
-                </p>
-              </div>
-
-              {/* Card Footer: Abstract Tech Barcode */}
-              <div className="relative z-10 pt-5 border-t border-white/[0.08] flex justify-between items-end">
-                <div className="flex flex-col gap-1">
-                  <span className="geist-mono text-[8px] text-neutral-500 tracking-widest">
-                    UC RIVERSIDE &bull; CLOUD &bull; SEC
-                  </span>
-                  {/* CSS Barcode simulation */}
-                  <div className="flex gap-[2px] h-6 mt-1 opacity-60">
-                    {[1, 3, 2, 5, 1, 4, 2, 2, 4, 1, 3, 2, 1].map((width, i) => (
-                      <div key={i} className="bg-white" style={{ width: `${width}px` }} />
-                    ))}
-                  </div>
-                </div>
-                
-                <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center">
-                  <PokeBall size={14} variant="poke" />
-                </div>
-              </div>
-
-            </div>
-          </div>
+        <div 
+          className="animate-reveal lg:col-span-5 flex justify-center lg:justify-end"
+          style={{ animationDelay: "0.6s" }}
+        >
+          <GoldCard />
         </div>
 
-      </div>
-
-      {/* Bottom Footer Border */}
-      <div className="w-full max-w-7xl mx-auto border-t border-white/[0.08] pt-6 flex justify-between items-center text-[10px] geist-mono text-neutral-500 tracking-widest uppercase">
-        <span>Portfolio &bull; v1.0.0</span>
-        <span className="hidden sm:inline">Scroll to Initialize Sequence</span>
       </div>
     </section>
   );
