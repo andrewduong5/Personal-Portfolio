@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
-import { ArrowRight, Terminal } from "lucide-react";
+import { ArrowRight, Terminal, Shield } from "lucide-react";
 
-// TCG Pocket Holographic Overlay Component - Refactored for frictionless satisfaction
+// TCG Pocket Holographic Overlay Component - Ultra Premium Physics & Glisten
 function GoldCard() {
   const cardRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -10,7 +10,6 @@ function GoldCard() {
     const card = cardRef.current;
     if (!card) return;
 
-    // --- The Satisfaction Engine (Unified) ---
     const processInput = (clientX, clientY) => {
       const rect = card.getBoundingClientRect();
       const x = clientX - rect.left;
@@ -19,11 +18,9 @@ function GoldCard() {
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
       
-      // Map coordinates to 3D axes. The card naturally follows the finger/mouse.
-      const rotateX = ((centerY - y) / centerY) * 22; 
-      const rotateY = ((x - centerX) / centerX) * 22;
+      const rotateX = ((centerY - y) / centerY) * 25; 
+      const rotateY = ((x - centerX) / centerX) * 25;
 
-      // Calculate where the light should hit
       const px = (x / rect.width) * 100;
       const py = (y / rect.height) * 100;
 
@@ -31,26 +28,20 @@ function GoldCard() {
       card.style.setProperty("--ry", `${rotateY}deg`);
       card.style.setProperty("--px", `${px}%`);
       card.style.setProperty("--py", `${py}%`);
-      card.style.setProperty("--opacity", "1"); // Activate visual tracking flare
+      card.style.setProperty("--opacity", "1");
     };
 
-    // --- Modern Unified Pointer Events ---
-    // Handles both Mouse Hover and Touch Drag without requiring a "click" state
     const handlePointerMove = (e) => {
-      // The targeting ensures this only fires when over the element
       processInput(e.clientX, e.clientY);
     };
 
-    // Pointer Over (Hover start)
     const handlePointerOver = (e) => {
-      setIsHovered(true); // Switch from idle shine to active glare state
-      processInput(e.clientX, e.clientY); // Initial position on enter
+      setIsHovered(true);
+      processInput(e.clientX, e.clientY);
     };
 
-    // Pointer Out/End (Hover leave, Touch lift)
-    const handlePointerOut = (e) => {
-      setIsHovered(false); // Return to idle shine state
-      // Smoothly snap back to center using satisfying cubic-bezier
+    const handlePointerOut = () => {
+      setIsHovered(false);
       card.style.setProperty("--rx", "0deg");
       card.style.setProperty("--ry", "0deg");
       card.style.setProperty("--opacity", "0");
@@ -58,15 +49,11 @@ function GoldCard() {
       card.style.setProperty("--py", "50%");
     };
 
-    // UnifiedListeners (The Fix): 
-    // `pointermove` covers hover (mouse) and drag (touch/pen).
     card.addEventListener("pointermove", handlePointerMove);
     card.addEventListener("pointerover", handlePointerOver);
     card.addEventListener("pointerout", handlePointerOut);
-    // Safety net for interrupted touch (e.g., phone call)
     card.addEventListener("touchcancel", handlePointerOut);
     
-    // Initial State Setup
     card.style.setProperty("--rx", "0deg");
     card.style.setProperty("--ry", "0deg");
     card.style.setProperty("--opacity", "0");
@@ -79,15 +66,15 @@ function GoldCard() {
       card.removeEventListener("pointerout", handlePointerOut);
       card.removeEventListener("touchcancel", handlePointerOut);
     };
-  }, []); // isHovered removed from dependencies as handlers don't need current state.
+  }, []); 
 
   return (
     <div className="perspective-[1200px] w-full max-w-[340px] aspect-[2.5/3.5] mx-auto z-20 group relative">
+      {/* Ambient back-glow behind card */}
+      <div className="absolute -inset-2 bg-gradient-to-r from-amber-500/20 via-white/10 to-blue-500/20 rounded-[22px] blur-xl opacity-75 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      
       <div
         ref={cardRef}
-        // Dynamic Satisfaction Transition:
-        // FAST 0.15s duration gives physical weight/inertia while interacting.
-        // SLOW 0.6s duration provides a satisfying spring-like release when let go.
         className={`w-full h-full relative rounded-[18px] cursor-pointer preserve-3d ${
           isHovered 
             ? "transition-[transform,box-shadow,opacity] duration-[150ms] ease-out" 
@@ -95,19 +82,17 @@ function GoldCard() {
         }`}
         style={{
           transform: "rotateX(var(--rx)) rotateY(var(--ry))",
-          // The shadow shifts opposite to the rotation to give massive 3D depth illusion
-          boxShadow: "0 20px 40px -10px rgba(0,0,0,0.8), calc(var(--ry) * -1px) calc(var(--rx) * 1px) 30px rgba(250, 204, 21, 0.3)",
-          touchAction: "none" // The fix for mobile: locks standard scrolling gestures while interacting
+          boxShadow: "0 30px 60px -15px rgba(0,0,0,0.95), calc(var(--ry) * -1px) calc(var(--rx) * 1px) 40px rgba(250, 204, 21, 0.4)",
+          touchAction: "none" 
         }}
       >
-        {/* BASE LAYER: AVIF image from GoldCard.avif */}
         <img 
           src="/GoldCard.avif" 
           alt="Mew ex Gold Secret Rare" 
           className="absolute inset-0 w-full h-full object-cover rounded-[18px]"
         />
 
-        {/* IDLE SHINE LAYER (Sweeps linearly when untouched) */}
+        {/* Continuous Idle Shine */}
         <div
           className={`absolute inset-0 rounded-[18px] pointer-events-none mix-blend-color-dodge transition-opacity duration-700 z-10 ${
             isHovered ? "opacity-0" : "opacity-100"
@@ -116,17 +101,17 @@ function GoldCard() {
             background: `linear-gradient(
               105deg,
               transparent 10%,
-              rgba(255, 255, 255, 0.3) 20%,
-              rgba(255, 230, 100, 0.7) 40%,
-              rgba(255, 255, 255, 0.3) 60%,
+              rgba(255, 255, 255, 0.4) 20%,
+              rgba(255, 230, 100, 0.8) 40%,
+              rgba(255, 255, 255, 0.4) 60%,
               transparent 70%
             )`,
             backgroundSize: "200% 100%",
-            animation: "idleShine 6s linear infinite",
+            animation: "idleShine 5s linear infinite",
           }}
         />
 
-        {/* GLARE LAYER: TCG Pocket Rainbow Foil (Active on hover/drag) */}
+        {/* Interactive Pointer Glare */}
         <div
           className="absolute inset-0 rounded-[18px] pointer-events-none transition-opacity duration-300 mix-blend-color-dodge z-10"
           style={{
@@ -151,7 +136,7 @@ function GoldCard() {
           }}
         />
 
-        {/* Diagonal glitter lines to mimic physical card texture */}
+        {/* Foil Texture */}
         <div 
           className="absolute inset-0 rounded-[18px] pointer-events-none mix-blend-overlay transition-opacity duration-300 z-20"
           style={{
@@ -164,7 +149,7 @@ function GoldCard() {
   );
 }
 
-// Main Hero Layout (Typography Untouched)
+// Main Hero Layout - Grounded in resume facts with subtle cloud security / analyst focus
 export default function Hero({ onStartClick }) {
   const handleStartTransition = () => {
     if (onStartClick) {
@@ -180,120 +165,134 @@ export default function Hero({ onStartClick }) {
   return (
     <section
       id="hero"
-      className="min-h-screen flex items-center bg-[#0A0A0A] text-white pt-20 pb-10 px-6 sm:px-12 relative overflow-hidden selection:bg-white selection:text-black"
+      className="min-h-screen flex items-center bg-[#070707] text-white pt-20 pb-10 px-6 sm:px-12 relative overflow-hidden selection:bg-white selection:text-black"
     >
       <style>
         {`
-          /* Initial Cinematic blur reveal for the text on page load */
-          @keyframes blurReveal {
-            0% { opacity: 0; transform: translateY(15px); filter: blur(8px); }
-            100% { opacity: 1; transform: translateY(0); filter: blur(0px); }
+          @keyframes cinematicReveal {
+            0% { opacity: 0; transform: translateY(25px) scale(0.97); filter: blur(12px); }
+            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0px); }
           }
           .animate-reveal {
             opacity: 0;
-            animation: blurReveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            animation: cinematicReveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
           }
 
-          /* TCG card idle glisten keyframe (Continuous motion) */
+          @keyframes ambientPulse {
+            0%, 100% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(1.12); }
+          }
+          .animate-ambient-pulse {
+            animation: ambientPulse 7s ease-in-out infinite;
+          }
+
           @keyframes idleShine {
             0% { background-position: -200% 0%; }
             100% { background-position: 200% 0%; }
           }
 
-          /* --- INFINITE TEXT ANIMATIONS --- */
-
-          /* Slow, constant background sweep for a shifting metallic gradient within letters */
-          @keyframes textGlistenSweep {
+          @keyframes diamondGlint {
             0% { background-position: 200% center; }
             100% { background-position: -200% center; }
           }
-          /* Applies the infinite glisten specifically to Name text ( silver-gold theme) */
-          .animate-infinite-glisten {
+          .animate-diamond-glint {
             background-image: linear-gradient(
-              90deg,
-              #ffffff 0%,
-              #ffffff 30%,
-              #a3a3a3 40%,
-              #facc15 50%,
-              #a3a3a3 60%,
-              #ffffff 70%,
-              #ffffff 100%
+              110deg,
+              #ffffff 38%,
+              #ffffff 44%,
+              #fef08a 48%,
+              #ffffff 52%,
+              #ffffff 62%
             );
-            background-size: 200% auto;
+            background-size: 250% auto;
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
             -webkit-text-fill-color: transparent;
-            /* Applies very slowly and linearly so it feels like liquid metal */
-            animation: textGlistenSweep 7s linear infinite;
+            animation: diamondGlint 3.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
           }
 
-          /* Slow rhythmic opacity pulse for the description text */
-          @keyframes pulseSoftOpacity {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-          }
-          /* Applies the soft infinite pulse and tech font to Paragraph */
-          .animate-infinite-pulse {
-            /* Rhythmic and comforting cubic bezier */
-            animation: pulseSoftOpacity 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+          .scanlines {
+            background: linear-gradient(
+              to bottom,
+              rgba(255,255,255,0),
+              rgba(255,255,255,0) 50%,
+              rgba(0, 0, 0, 0.3) 50%,
+              rgba(0, 0, 0, 0.3)
+            );
+            background-size: 100% 4px;
           }
         `}
       </style>
 
-      <div className="absolute inset-0 pointer-events-none opacity-[0.04]">
-        <div className="w-full h-full bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] bg-[size:40px_40px]" />
+      {/* Cybernetic ambient glow layers */}
+      <div className="absolute -left-20 top-1/4 w-[500px] h-[500px] bg-gradient-to-tr from-amber-600/15 via-blue-600/10 to-transparent rounded-full blur-[120px] pointer-events-none animate-ambient-pulse" />
+      <div className="absolute right-10 bottom-10 w-[400px] h-[400px] bg-gradient-to-bl from-purple-600/10 via-white/5 to-transparent rounded-full blur-[100px] pointer-events-none animate-ambient-pulse" style={{ animationDelay: "3.5s" }} />
+
+      {/* Subtle Scanline Grid overlay */}
+      <div className="absolute inset-0 scanlines opacity-30 pointer-events-none" />
+      <div className="absolute inset-0 pointer-events-none opacity-[0.05]">
+        <div className="w-full h-full bg-[radial-gradient(circle_at_center,white_1.5px,transparent_1.5px)] bg-[size:32px_32px]" />
       </div>
 
       <div className="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10 py-10">
         
-        {/* Left Side: Clean, High-End Professional Intro with Constantly Animated Wording */}
+        {/* Left Side: Grounded introduction with subtle security analyst & cloud security focus */}
         <div className="lg:col-span-7 flex flex-col items-start">
           
           <div 
-            className="animate-reveal inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full border border-white/20 bg-white/[0.05] mb-6 backdrop-blur-md"
+            className="animate-reveal inline-flex items-center gap-3 px-4 py-2 rounded-full border border-white/20 bg-white/[0.06] mb-6 backdrop-blur-2xl shadow-[0_0_25px_rgba(255,255,255,0.06)] group cursor-default"
             style={{ animationDelay: "0.1s" }}
           >
-            <Terminal size={12} className="text-white" />
-            <span className="geist-mono text-[11px] text-white/90 tracking-widest uppercase font-semibold">
-              Systems & Infrastructure
+            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <Terminal size={13} className="text-white" />
+            <span className="geist-mono text-[11px] text-white tracking-[0.25em] uppercase font-semibold">
+              UCR BIS GRAD // AWS & COMPTIA A+
             </span>
           </div>
 
-          <h1 className="text-5xl sm:text-7xl lg:text-[5.5rem] font-black tracking-tight mb-6 leading-[1.05]">
-            <span className="animate-reveal block" style={{ animationDelay: "0.2s" }}>
+          <h1 className="text-5xl sm:text-7xl lg:text-[5.5rem] font-black tracking-tighter mb-6 leading-[1.02]">
+            <span className="animate-reveal block text-neutral-400 font-light tracking-tight" style={{ animationDelay: "0.2s" }}>
               ANDREW
             </span>
-            {/* Reveal animation on the wrapper, infinite glisten on the text inside */}
-            <span className="animate-reveal block" style={{ animationDelay: "0.3s" }}>
-              <span className="animate-infinite-glisten block">
+            <span className="animate-reveal block drop-shadow-[0_15px_30px_rgba(255,255,255,0.15)]" style={{ animationDelay: "0.3s" }}>
+              <span className="animate-diamond-glint block">
                 DUONG.
               </span>
             </span>
           </h1>
 
-          {/* Reveal animation on the wrapper, pulse is on the paragraph inside */}
-          <div className="animate-reveal max-w-lg mb-10" style={{ animationDelay: "0.4s" }}>
-            <p className="animate-infinite-pulse geist-mono text-sm sm:text-base text-white/90 leading-relaxed">
-              Information Systems specialist exploring scalable networks, distributed homelabs, and intelligent software systems. Designed with the precision of an engineer and the heart of a trainer.
+          <div className="animate-reveal max-w-lg mb-10 relative" style={{ animationDelay: "0.4s" }}>
+            <div className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-white via-amber-400 to-transparent rounded-full" />
+            <p className="geist-mono text-sm sm:text-base text-neutral-300 leading-relaxed font-light pl-4 backdrop-blur-sm">
+              Information Systems graduate from UC Riverside. Certified AWS Cloud Practitioner and CompTIA A+ professional expanding into cloud security and security analysis through hands-on labs and continuous learning.
             </p>
           </div>
 
-          <button
-            onClick={handleStartTransition}
-            className="animate-reveal group flex items-center gap-4 px-8 py-4 bg-white text-black rounded-full hover:bg-neutral-200 hover:shadow-[0_0_30px_rgba(255,255,255,0.15)] transition-all duration-300 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
-            style={{ animationDelay: "0.5s" }}
-          >
-            <span className="geist-mono text-xs font-bold tracking-[0.15em] uppercase">
-              Explore Work
-            </span>
-            <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center group-hover:translate-x-1 transition-transform">
-              <ArrowRight size={14} className="text-white" />
+          <div className="animate-reveal flex flex-wrap gap-4 items-center" style={{ animationDelay: "0.5s" }}>
+            <button
+              onClick={handleStartTransition}
+              className="group relative inline-flex items-center gap-4 px-8 py-4 bg-white text-black rounded-full hover:bg-neutral-100 transition-all duration-300 active:scale-95 shadow-[0_0_35px_rgba(255,255,255,0.25)] overflow-hidden"
+            >
+              <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/70 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+              <span className="geist-mono text-xs font-bold tracking-[0.2em] uppercase relative z-10">
+                Explore Work
+              </span>
+              <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center group-hover:translate-x-1.5 transition-transform relative z-10 shadow-md">
+                <ArrowRight size={14} className="text-white" />
+              </div>
+            </button>
+
+            <div className="flex items-center gap-3 px-4 py-3 rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-md">
+              <Shield size={16} className="text-amber-400" />
+              <span className="geist-mono text-[11px] text-neutral-400 tracking-wider uppercase">
+                Cloud Security & Analysis Focus
+              </span>
             </div>
-          </button>
+          </div>
         </div>
 
-        {/* Right Side: The Interactive Gold Card (Mobile Optimized) */}
+        {/* Right Side: The Ultra-Satisfying Holographic Card */}
         <div 
           className="animate-reveal lg:col-span-5 flex justify-center lg:justify-end"
           style={{ animationDelay: "0.6s" }}
