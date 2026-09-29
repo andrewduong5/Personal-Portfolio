@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { ArrowRight, Terminal, Shield } from "lucide-react";
 
-// TCG Pocket Holographic Overlay Component - Ultra Premium Physics & Glisten
+// TCG Pocket Holographic Overlay Component - Tuned for Ultra-Smooth Mobile & PC Physics
 function GoldCard() {
   const cardRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -10,7 +10,7 @@ function GoldCard() {
     const card = cardRef.current;
     if (!card) return;
 
-    const processInput = (clientX, clientY) => {
+    const processInput = (clientX, clientY, pointerType) => {
       const rect = card.getBoundingClientRect();
       const x = clientX - rect.left;
       const y = clientY - rect.top;
@@ -18,8 +18,12 @@ function GoldCard() {
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
       
-      const rotateX = ((centerY - y) / centerY) * 25; 
-      const rotateY = ((x - centerX) / centerX) * 25;
+      // Detect if interaction is touch/mobile vs mouse and amplify sensitivity for touch
+      const isTouch = pointerType === 'touch' || pointerType === 'pen';
+      const sensitivity = isTouch ? 1.35 : 1.0; 
+
+      const rotateX = ((centerY - y) / centerY) * 30 * sensitivity; 
+      const rotateY = ((x - centerX) / centerX) * 30 * sensitivity;
 
       const px = (x / rect.width) * 100;
       const py = (y / rect.height) * 100;
@@ -32,12 +36,12 @@ function GoldCard() {
     };
 
     const handlePointerMove = (e) => {
-      processInput(e.clientX, e.clientY);
+      processInput(e.clientX, e.clientY, e.pointerType);
     };
 
     const handlePointerOver = (e) => {
       setIsHovered(true);
-      processInput(e.clientX, e.clientY);
+      processInput(e.clientX, e.clientY, e.pointerType);
     };
 
     const handlePointerOut = () => {
@@ -77,13 +81,13 @@ function GoldCard() {
         ref={cardRef}
         className={`w-full h-full relative rounded-[18px] cursor-pointer preserve-3d ${
           isHovered 
-            ? "transition-[transform,box-shadow,opacity] duration-[150ms] ease-out" 
+            ? "transition-[transform,box-shadow,opacity] duration-[100ms] ease-out" 
             : "transition-[transform,box-shadow,opacity] duration-[600ms] cubic-bezier(0.23, 1, 0.32, 1)"
         }`}
         style={{
           transform: "rotateX(var(--rx)) rotateY(var(--ry))",
           boxShadow: "0 30px 60px -15px rgba(0,0,0,0.95), calc(var(--ry) * -1px) calc(var(--rx) * 1px) 40px rgba(250, 204, 21, 0.4)",
-          touchAction: "none" 
+          touchAction: "none" // Prevents mobile browser scrolling while inspecting the card
         }}
       >
         <img 
@@ -149,7 +153,7 @@ function GoldCard() {
   );
 }
 
-// Main Hero Layout - Grounded in resume facts with subtle cloud security / analyst focus
+// Main Hero Layout
 export default function Hero({ onStartClick }) {
   const handleStartTransition = () => {
     if (onStartClick) {
@@ -237,7 +241,7 @@ export default function Hero({ onStartClick }) {
 
       <div className="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10 py-10">
         
-        {/* Left Side: Grounded introduction with subtle security analyst & cloud security focus */}
+        {/* Left Side: Professional Intro */}
         <div className="lg:col-span-7 flex flex-col items-start">
           
           <div 
@@ -265,7 +269,7 @@ export default function Hero({ onStartClick }) {
           <div className="animate-reveal max-w-lg mb-10 relative" style={{ animationDelay: "0.4s" }}>
             <div className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-white via-amber-400 to-transparent rounded-full" />
             <p className="geist-mono text-sm sm:text-base text-neutral-300 leading-relaxed font-light pl-4 backdrop-blur-sm">
-              Information Systems graduate from UC Riverside. Certified AWS Cloud Practitioner and CompTIA A+ professional expanding into cloud security and security analysis through hands-on labs and continuous learning.
+              Information Systems graduate from UC Riverside[cite: 3]. Certified AWS Cloud Practitioner and CompTIA A+ professional[cite: 3] expanding into cloud security and security analysis through hands-on labs and continuous learning.
             </p>
           </div>
 
@@ -292,7 +296,7 @@ export default function Hero({ onStartClick }) {
           </div>
         </div>
 
-        {/* Right Side: The Ultra-Satisfying Holographic Card */}
+        {/* Right Side: The Ultra-Smooth Mobile/PC Interactive Gold Card */}
         <div 
           className="animate-reveal lg:col-span-5 flex justify-center lg:justify-end"
           style={{ animationDelay: "0.6s" }}
