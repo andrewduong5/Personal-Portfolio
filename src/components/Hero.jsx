@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { ArrowRight, Terminal, Shield } from "lucide-react";
 
-// TCG Pocket Holographic Overlay Component - Tuned for Ultra-Smooth Mobile & PC Physics
+// TCG Pocket Holographic Overlay Component - Responsive Tilt & Inspect Physics (No Free Spinning)
 function GoldCard() {
   const cardRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -18,12 +18,12 @@ function GoldCard() {
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
       
-      // Detect if interaction is touch/mobile vs mouse and amplify sensitivity for touch
       const isTouch = pointerType === 'touch' || pointerType === 'pen';
-      const sensitivity = isTouch ? 1.35 : 1.0; 
+      const sensitivity = isTouch ? 1.5 : 1.2; 
 
-      const rotateX = ((centerY - y) / centerY) * 30 * sensitivity; 
-      const rotateY = ((x - centerX) / centerX) * 30 * sensitivity;
+      // Strictly bound inspection tilt angles (prevents spinning, enables smooth inspection)
+      const rotateX = Math.max(-28, Math.min(28, ((centerY - y) / centerY) * 28 * sensitivity));
+      const rotateY = Math.max(-28, Math.min(28, ((x - centerX) / centerX) * 28 * sensitivity));
 
       const px = (x / rect.width) * 100;
       const py = (y / rect.height) * 100;
@@ -73,32 +73,30 @@ function GoldCard() {
   }, []); 
 
   return (
-    <div className="perspective-[1200px] w-full max-w-[340px] aspect-[2.5/3.5] mx-auto z-20 group relative">
-      {/* Ambient back-glow behind card */}
-      <div className="absolute -inset-2 bg-gradient-to-r from-amber-500/20 via-white/10 to-blue-500/20 rounded-[22px] blur-xl opacity-75 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+    <div className="perspective-[1400px] w-full max-w-[340px] aspect-[2.5/3.5] mx-auto z-20 group relative">
+      <div className="absolute -inset-3 bg-gradient-to-r from-amber-500/30 via-cyan-500/20 to-purple-600/30 rounded-[24px] blur-2xl opacity-80 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none animate-pulse" />
       
       <div
         ref={cardRef}
-        className={`w-full h-full relative rounded-[18px] cursor-pointer preserve-3d ${
+        className={`w-full h-full relative rounded-[20px] cursor-pointer preserve-3d ${
           isHovered 
-            ? "transition-[transform,box-shadow,opacity] duration-[100ms] ease-out" 
+            ? "transition-[transform,box-shadow,opacity] duration-[60ms] ease-out" 
             : "transition-[transform,box-shadow,opacity] duration-[600ms] cubic-bezier(0.23, 1, 0.32, 1)"
         }`}
         style={{
           transform: "rotateX(var(--rx)) rotateY(var(--ry))",
-          boxShadow: "0 30px 60px -15px rgba(0,0,0,0.95), calc(var(--ry) * -1px) calc(var(--rx) * 1px) 40px rgba(250, 204, 21, 0.4)",
-          touchAction: "none" // Prevents mobile browser scrolling while inspecting the card
+          boxShadow: "0 35px 70px -15px rgba(0,0,0,0.95), calc(var(--ry) * -1.2px) calc(var(--rx) * 1.2px) 45px rgba(250, 204, 21, 0.45)",
+          touchAction: "none" 
         }}
       >
         <img 
           src="/GoldCard.avif" 
           alt="Mew ex Gold Secret Rare" 
-          className="absolute inset-0 w-full h-full object-cover rounded-[18px]"
+          className="absolute inset-0 w-full h-full object-cover rounded-[20px]"
         />
 
-        {/* Continuous Idle Shine */}
         <div
-          className={`absolute inset-0 rounded-[18px] pointer-events-none mix-blend-color-dodge transition-opacity duration-700 z-10 ${
+          className={`absolute inset-0 rounded-[20px] pointer-events-none mix-blend-color-dodge transition-opacity duration-700 z-10 ${
             isHovered ? "opacity-0" : "opacity-100"
           }`}
           style={{
@@ -106,46 +104,44 @@ function GoldCard() {
               105deg,
               transparent 10%,
               rgba(255, 255, 255, 0.4) 20%,
-              rgba(255, 230, 100, 0.8) 40%,
+              rgba(250, 204, 21, 0.8) 40%,
               rgba(255, 255, 255, 0.4) 60%,
               transparent 70%
             )`,
             backgroundSize: "200% 100%",
-            animation: "idleShine 5s linear infinite",
+            animation: "idleShine 4.5s linear infinite",
           }}
         />
 
-        {/* Interactive Pointer Glare */}
         <div
-          className="absolute inset-0 rounded-[18px] pointer-events-none transition-opacity duration-300 mix-blend-color-dodge z-10"
+          className="absolute inset-0 rounded-[20px] pointer-events-none transition-opacity duration-300 mix-blend-color-dodge z-10"
           style={{
             opacity: "var(--opacity, 0)",
             background: `
               radial-gradient(
                 farthest-corner circle at var(--px) var(--py), 
-                rgba(255, 255, 255, 0.95) 0%, 
-                rgba(255, 255, 255, 0.2) 30%, 
+                rgba(255, 255, 255, 0.98) 0%, 
+                rgba(255, 230, 150, 0.4) 25%, 
                 transparent 60%
               ),
               linear-gradient(
                 115deg, 
                 transparent 0%, 
-                rgba(255, 100, 150, 0.6) calc(var(--px) - 25%), 
-                rgba(255, 255, 100, 0.8) calc(var(--px) - 10%), 
-                rgba(100, 200, 255, 0.8) calc(var(--px)), 
-                rgba(100, 200, 255, 0.6) calc(var(--px) + 10%), 
-                transparent calc(var(--px) + 30%)
+                rgba(255, 100, 180, 0.65) calc(var(--px) - 25%), 
+                rgba(250, 204, 21, 0.85) calc(var(--px) - 10%), 
+                rgba(50, 220, 255, 0.85) calc(var(--px)), 
+                rgba(100, 200, 255, 0.6) calc(var(--px) + 12%), 
+                transparent calc(var(--px) + 35%)
               )
             `
           }}
         />
 
-        {/* Foil Texture */}
         <div 
-          className="absolute inset-0 rounded-[18px] pointer-events-none mix-blend-overlay transition-opacity duration-300 z-20"
+          className="absolute inset-0 rounded-[20px] pointer-events-none mix-blend-overlay transition-opacity duration-300 z-20"
           style={{
-            opacity: "calc(var(--opacity, 0) * 0.4)",
-            backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255,255,255,0.4) 3px, rgba(255,255,255,0.4) 4px)"
+            opacity: "calc(var(--opacity, 0) * 0.45)",
+            backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255,255,255,0.45) 3px, rgba(255,255,255,0.45) 4px)"
           }}
         />
       </div>
@@ -269,7 +265,7 @@ export default function Hero({ onStartClick }) {
           <div className="animate-reveal max-w-lg mb-10 relative" style={{ animationDelay: "0.4s" }}>
             <div className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-white via-amber-400 to-transparent rounded-full" />
             <p className="geist-mono text-sm sm:text-base text-neutral-300 leading-relaxed font-light pl-4 backdrop-blur-sm">
-              Information Systems graduate from UC Riverside[cite: 3]. Certified AWS Cloud Practitioner and CompTIA A+ professional[cite: 3] expanding into cloud security and security analysis through hands-on labs and continuous learning.
+              Information Systems graduate from UC Riverside. Certified AWS Cloud Practitioner and CompTIA A+ professional expanding into cloud security and security analysis through hands-on labs and continuous learning.
             </p>
           </div>
 
@@ -296,7 +292,7 @@ export default function Hero({ onStartClick }) {
           </div>
         </div>
 
-        {/* Right Side: The Ultra-Smooth Mobile/PC Interactive Gold Card */}
+        {/* Right Side: The Ultra-Responsive Inspect Card (No Spinning) */}
         <div 
           className="animate-reveal lg:col-span-5 flex justify-center lg:justify-end"
           style={{ animationDelay: "0.6s" }}
