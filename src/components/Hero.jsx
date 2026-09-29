@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { ArrowRight, Terminal } from "lucide-react";
 
-// TCG Pocket Holographic Overlay Component
+// TCG Pocket Holographic Overlay Component - Refactored for frictionless satisfaction
 function GoldCard() {
   const cardRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -10,16 +10,20 @@ function GoldCard() {
     const card = cardRef.current;
     if (!card) return;
 
-    const handleMouseMove = (e) => {
+    // --- The Satisfaction Engine (Unified) ---
+    const processInput = (clientX, clientY) => {
       const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
 
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      const rotateX = ((y - centerY) / centerY) * -25;
-      const rotateY = ((x - centerX) / centerX) * 25;
+      
+      // Map coordinates to 3D axes. The card naturally follows the finger/mouse.
+      const rotateX = ((centerY - y) / centerY) * 22; 
+      const rotateY = ((x - centerX) / centerX) * 22;
 
+      // Calculate where the light should hit
       const px = (x / rect.width) * 100;
       const py = (y / rect.height) * 100;
 
@@ -27,13 +31,26 @@ function GoldCard() {
       card.style.setProperty("--ry", `${rotateY}deg`);
       card.style.setProperty("--px", `${px}%`);
       card.style.setProperty("--py", `${py}%`);
-      card.style.setProperty("--opacity", "1");
+      card.style.setProperty("--opacity", "1"); // Activate visual tracking flare
     };
 
-    const handleMouseEnter = () => setIsHovered(true);
+    // --- Modern Unified Pointer Events ---
+    // Handles both Mouse Hover and Touch Drag without requiring a "click" state
+    const handlePointerMove = (e) => {
+      // The targeting ensures this only fires when over the element
+      processInput(e.clientX, e.clientY);
+    };
 
-    const handleMouseLeave = () => {
-      setIsHovered(false);
+    // Pointer Over (Hover start)
+    const handlePointerOver = (e) => {
+      setIsHovered(true); // Switch from idle shine to active glare state
+      processInput(e.clientX, e.clientY); // Initial position on enter
+    };
+
+    // Pointer Out/End (Hover leave, Touch lift)
+    const handlePointerOut = (e) => {
+      setIsHovered(false); // Return to idle shine state
+      // Smoothly snap back to center using satisfying cubic-bezier
       card.style.setProperty("--rx", "0deg");
       card.style.setProperty("--ry", "0deg");
       card.style.setProperty("--opacity", "0");
@@ -41,10 +58,15 @@ function GoldCard() {
       card.style.setProperty("--py", "50%");
     };
 
-    card.addEventListener("mousemove", handleMouseMove);
-    card.addEventListener("mouseenter", handleMouseEnter);
-    card.addEventListener("mouseleave", handleMouseLeave);
+    // UnifiedListeners (The Fix): 
+    // `pointermove` covers hover (mouse) and drag (touch/pen).
+    card.addEventListener("pointermove", handlePointerMove);
+    card.addEventListener("pointerover", handlePointerOver);
+    card.addEventListener("pointerout", handlePointerOut);
+    // Safety net for interrupted touch (e.g., phone call)
+    card.addEventListener("touchcancel", handlePointerOut);
     
+    // Initial State Setup
     card.style.setProperty("--rx", "0deg");
     card.style.setProperty("--ry", "0deg");
     card.style.setProperty("--opacity", "0");
@@ -52,29 +74,40 @@ function GoldCard() {
     card.style.setProperty("--py", "50%");
 
     return () => {
-      card.removeEventListener("mousemove", handleMouseMove);
-      card.removeEventListener("mouseenter", handleMouseEnter);
-      card.removeEventListener("mouseleave", handleMouseLeave);
+      card.removeEventListener("pointermove", handlePointerMove);
+      card.removeEventListener("pointerover", handlePointerOver);
+      card.removeEventListener("pointerout", handlePointerOut);
+      card.removeEventListener("touchcancel", handlePointerOut);
     };
-  }, []);
+  }, []); // isHovered removed from dependencies as handlers don't need current state.
 
   return (
-    <div className="perspective-[1500px] w-full max-w-[340px] aspect-[2.5/3.5] mx-auto z-20 group">
+    <div className="perspective-[1200px] w-full max-w-[340px] aspect-[2.5/3.5] mx-auto z-20 group relative">
       <div
         ref={cardRef}
-        className="w-full h-full relative rounded-[18px] cursor-pointer preserve-3d transition-[transform,box-shadow] duration-[100ms] ease-out shadow-2xl"
+        // Dynamic Satisfaction Transition:
+        // FAST 0.15s duration gives physical weight/inertia while interacting.
+        // SLOW 0.6s duration provides a satisfying spring-like release when let go.
+        className={`w-full h-full relative rounded-[18px] cursor-pointer preserve-3d ${
+          isHovered 
+            ? "transition-[transform,box-shadow,opacity] duration-[150ms] ease-out" 
+            : "transition-[transform,box-shadow,opacity] duration-[600ms] cubic-bezier(0.23, 1, 0.32, 1)"
+        }`}
         style={{
           transform: "rotateX(var(--rx)) rotateY(var(--ry))",
-          boxShadow: "0 25px 50px -12px rgba(0,0,0,0.8), calc(var(--ry) * -1px) calc(var(--rx) * 1px) 25px rgba(250, 204, 21, 0.4)",
+          // The shadow shifts opposite to the rotation to give massive 3D depth illusion
+          boxShadow: "0 20px 40px -10px rgba(0,0,0,0.8), calc(var(--ry) * -1px) calc(var(--rx) * 1px) 30px rgba(250, 204, 21, 0.3)",
+          touchAction: "none" // The fix for mobile: locks standard scrolling gestures while interacting
         }}
       >
+        {/* BASE LAYER: AVIF image from GoldCard.avif */}
         <img 
           src="/GoldCard.avif" 
           alt="Mew ex Gold Secret Rare" 
           className="absolute inset-0 w-full h-full object-cover rounded-[18px]"
         />
 
-        {/* IDLE SHINE LAYER */}
+        {/* IDLE SHINE LAYER (Sweeps linearly when untouched) */}
         <div
           className={`absolute inset-0 rounded-[18px] pointer-events-none mix-blend-color-dodge transition-opacity duration-700 z-10 ${
             isHovered ? "opacity-0" : "opacity-100"
@@ -83,9 +116,9 @@ function GoldCard() {
             background: `linear-gradient(
               105deg,
               transparent 10%,
-              rgba(255, 255, 255, 0.4) 20%,
-              rgba(255, 230, 100, 0.8) 40%,
-              rgba(255, 255, 255, 0.4) 60%,
+              rgba(255, 255, 255, 0.3) 20%,
+              rgba(255, 230, 100, 0.7) 40%,
+              rgba(255, 255, 255, 0.3) 60%,
               transparent 70%
             )`,
             backgroundSize: "200% 100%",
@@ -93,7 +126,7 @@ function GoldCard() {
           }}
         />
 
-        {/* GLARE LAYER */}
+        {/* GLARE LAYER: TCG Pocket Rainbow Foil (Active on hover/drag) */}
         <div
           className="absolute inset-0 rounded-[18px] pointer-events-none transition-opacity duration-300 mix-blend-color-dodge z-10"
           style={{
@@ -102,8 +135,8 @@ function GoldCard() {
               radial-gradient(
                 farthest-corner circle at var(--px) var(--py), 
                 rgba(255, 255, 255, 0.95) 0%, 
-                rgba(255, 255, 255, 0.3) 20%, 
-                transparent 50%
+                rgba(255, 255, 255, 0.2) 30%, 
+                transparent 60%
               ),
               linear-gradient(
                 115deg, 
@@ -118,7 +151,7 @@ function GoldCard() {
           }}
         />
 
-        {/* DIAGONAL TEXTURE */}
+        {/* Diagonal glitter lines to mimic physical card texture */}
         <div 
           className="absolute inset-0 rounded-[18px] pointer-events-none mix-blend-overlay transition-opacity duration-300 z-20"
           style={{
@@ -131,7 +164,7 @@ function GoldCard() {
   );
 }
 
-// Main Hero Layout
+// Main Hero Layout (Typography Untouched)
 export default function Hero({ onStartClick }) {
   const handleStartTransition = () => {
     if (onStartClick) {
@@ -151,6 +184,7 @@ export default function Hero({ onStartClick }) {
     >
       <style>
         {`
+          /* Initial Cinematic blur reveal for the text on page load */
           @keyframes blurReveal {
             0% { opacity: 0; transform: translateY(15px); filter: blur(8px); }
             100% { opacity: 1; transform: translateY(0); filter: blur(0px); }
@@ -160,16 +194,20 @@ export default function Hero({ onStartClick }) {
             animation: blurReveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
           }
 
+          /* TCG card idle glisten keyframe (Continuous motion) */
           @keyframes idleShine {
             0% { background-position: -200% 0%; }
             100% { background-position: 200% 0%; }
           }
 
-          /* Faster, smooth sweep for the metallic text */
+          /* --- INFINITE TEXT ANIMATIONS --- */
+
+          /* Slow, constant background sweep for a shifting metallic gradient within letters */
           @keyframes textGlistenSweep {
             0% { background-position: 200% center; }
             100% { background-position: -200% center; }
           }
+          /* Applies the infinite glisten specifically to Name text ( silver-gold theme) */
           .animate-infinite-glisten {
             background-image: linear-gradient(
               90deg,
@@ -186,16 +224,19 @@ export default function Hero({ onStartClick }) {
             -webkit-background-clip: text;
             color: transparent;
             -webkit-text-fill-color: transparent;
+            /* Applies very slowly and linearly so it feels like liquid metal */
             animation: textGlistenSweep 7s linear infinite;
           }
 
-          /* Gentle breathing opacity */
+          /* Slow rhythmic opacity pulse for the description text */
           @keyframes pulseSoftOpacity {
             0%, 100% { opacity: 0.6; }
             50% { opacity: 1; }
           }
+          /* Applies the soft infinite pulse and tech font to Paragraph */
           .animate-infinite-pulse {
-            animation: pulseSoftOpacity 6s ease-in-out infinite;
+            /* Rhythmic and comforting cubic bezier */
+            animation: pulseSoftOpacity 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
           }
         `}
       </style>
@@ -206,6 +247,7 @@ export default function Hero({ onStartClick }) {
 
       <div className="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10 py-10">
         
+        {/* Left Side: Clean, High-End Professional Intro with Constantly Animated Wording */}
         <div className="lg:col-span-7 flex flex-col items-start">
           
           <div 
@@ -222,7 +264,7 @@ export default function Hero({ onStartClick }) {
             <span className="animate-reveal block" style={{ animationDelay: "0.2s" }}>
               ANDREW
             </span>
-            {/* WRAPPED: Now the reveal animation and the glisten animation are on separate layers! */}
+            {/* Reveal animation on the wrapper, infinite glisten on the text inside */}
             <span className="animate-reveal block" style={{ animationDelay: "0.3s" }}>
               <span className="animate-infinite-glisten block">
                 DUONG.
@@ -230,7 +272,7 @@ export default function Hero({ onStartClick }) {
             </span>
           </h1>
 
-          {/* WRAPPED: Same here, reveal is on the div, pulse is on the paragraph */}
+          {/* Reveal animation on the wrapper, pulse is on the paragraph inside */}
           <div className="animate-reveal max-w-lg mb-10" style={{ animationDelay: "0.4s" }}>
             <p className="animate-infinite-pulse geist-mono text-sm sm:text-base text-white/90 leading-relaxed">
               Information Systems specialist exploring scalable networks, distributed homelabs, and intelligent software systems. Designed with the precision of an engineer and the heart of a trainer.
@@ -251,6 +293,7 @@ export default function Hero({ onStartClick }) {
           </button>
         </div>
 
+        {/* Right Side: The Interactive Gold Card (Mobile Optimized) */}
         <div 
           className="animate-reveal lg:col-span-5 flex justify-center lg:justify-end"
           style={{ animationDelay: "0.6s" }}
