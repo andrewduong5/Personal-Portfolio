@@ -19,8 +19,13 @@ const links = [
 export default function Hero() {
   return (
     <section id="top" className="relative isolate overflow-hidden pb-16 pt-28 sm:pb-24 sm:pt-32">
-      <div className="pointer-events-none absolute inset-0 -z-10 mesh opacity-90" />
-      <div className="pointer-events-none absolute inset-0 -z-10 grid-lines opacity-[0.35] [mask-image:radial-gradient(ellipse_at_top,black,transparent_72%)]" />
+      {/* Hardware-accelerated background layers */}
+      <div 
+        className="pointer-events-none absolute inset-0 -z-10 mesh opacity-90 [transform:translateZ(0)]" 
+      />
+      <div 
+        className="pointer-events-none absolute inset-0 -z-10 grid-lines opacity-[0.35] [mask-image:radial-gradient(ellipse_at_top,black,transparent_72%)] [transform:translateZ(0)]" 
+      />
 
       <div className="mx-auto grid max-w-5xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-12 lg:gap-8">
         <div className="lg:col-span-6">
@@ -131,7 +136,8 @@ export default function Hero() {
           className="min-w-0 lg:col-span-6"
         >
           <div className="relative">
-            <div className="pointer-events-none absolute -inset-6 -z-10 rounded-[2rem] bg-white/[0.06] blur-3xl" />
+            {/* Replaced heavy blur-3xl with performant radial gradient */}
+            <div className="pointer-events-none absolute -inset-6 -z-10 rounded-[2rem] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06)_0%,transparent_70%)]" />
             <Terminal />
           </div>
         </motion.div>

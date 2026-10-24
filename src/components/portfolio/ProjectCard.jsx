@@ -22,7 +22,7 @@ export default function ProjectCard({ project, index = 0 }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.25, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }}
-      className="spotlight-card group flex h-full flex-col rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5 backdrop-blur-md transition-colors duration-200 hover:border-zinc-700 sm:p-6"
+      className="spotlight-card group flex h-full flex-col rounded-2xl border border-zinc-800/80 bg-zinc-900/90 p-5 [transform:translateZ(0)] transition-colors duration-200 hover:border-zinc-700 sm:p-6"
     >
       <div className="relative z-10 flex items-center justify-between gap-3">
         <span className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-slate-500">
