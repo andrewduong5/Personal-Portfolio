@@ -12,7 +12,10 @@ export default function Terminal() {
   const scrollRef = useRef(null);
 
   useEffect(() => {
-    const id = window.setInterval(() => setPing(12 + Math.floor(Math.random() * 5)), 2500);
+    // Only randomize ping periodically if needed, but throttle it gently
+    const id = window.setInterval(() => {
+      setPing(12 + Math.floor(Math.random() * 5));
+    }, 6000);
     return () => window.clearInterval(id);
   }, []);
 
@@ -35,8 +38,8 @@ export default function Terminal() {
   };
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950/80 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.95)] backdrop-blur-md">
-      <div className="flex items-center justify-between border-b border-zinc-800/80 bg-zinc-900/50 px-4 py-2.5">
+    <div className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.95)] [transform:translateZ(0)]">
+      <div className="flex items-center justify-between border-b border-zinc-800/80 bg-zinc-900/70 px-4 py-2.5">
         <div className="flex items-center gap-1.5">
           <span className="h-2.5 w-2.5 rounded-full bg-red-500/80" />
           <span className="h-2.5 w-2.5 rounded-full bg-yellow-400/80" />
@@ -81,13 +84,13 @@ export default function Terminal() {
           />
         </form>
       </div>
-      <div className="flex flex-wrap gap-1.5 border-t border-zinc-800/80 bg-zinc-900/40 p-3">
+      <div className="flex flex-wrap gap-1.5 border-t border-zinc-800/80 bg-zinc-900/50 p-3">
         {COMMANDS.map((c) => (
           <button
             key={c}
             type="button"
             onClick={() => run(c)}
-            className="rounded-md border border-zinc-800 bg-zinc-950/60 px-2.5 py-1 font-mono text-[10.5px] text-slate-400 transition-colors hover:border-cyan-400/40 hover:text-cyan-300"
+            className="rounded-md border border-zinc-800 bg-zinc-950 px-2.5 py-1 font-mono text-[10.5px] text-slate-400 transition-colors hover:border-cyan-400/40 hover:text-cyan-300"
           >
             {c}
           </button>
