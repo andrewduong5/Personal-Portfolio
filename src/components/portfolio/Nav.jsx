@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, FileText, Terminal } from "lucide-react";
 import { navLinks, profile } from "@/data/portfolio";
@@ -8,40 +8,72 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("");
   const [scrolled, setScrolled] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const progressBarRef = useRef(null);
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 12);
+    let ticking = false;
+
+    // Cache element lookups so we don't query the DOM on every pixel
+    const targets = navLinks
+      .map(({ href }) => ({ href, el: document.querySelector(href) }))
+      .filter((item) => item.el !== null);
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+
+      // 1. Direct DOM manipulation for the progress bar (Zero React re-renders)
       const max = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(max > 0 ? Math.min(1, window.scrollY / max) : 0);
-      const offset = window.scrollY + 140;
-      let current = "";
-      navLinks.forEach(({ href }) => {
-        const el = document.querySelector(href);
-        if (el && el.offsetTop <= offset) current = href;
+      if (progressBarRef.current) {
+        const ratio = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+        progressBarRef.current.style.transform = `scaleX(${ratio})`;
+      }
+
+      // 2. Only update state when scrolled boolean actually changes
+      setScrolled((prev) => {
+        const isPastThreshold = scrollY > 12;
+        return prev !== isPastThreshold ? isPastThreshold : prev;
       });
-      setActive(current);
+
+      // 3. Determine active section with low overhead
+      const offset = scrollY + 140;
+      let current = "";
+      for (let i = targets.length - 1; i >= 0; i--) {
+        if (targets[i].el.offsetTop <= offset) {
+          current = targets[i].href;
+          break;
+        }
+      }
+
+      setActive((prev) => (prev !== current ? current : prev));
+      ticking = false;
     };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(handleScroll);
+        ticking = true;
+      }
+    };
+
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4">
+    <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 [transform:translateZ(0)]">
       <div className="pointer-events-none fixed inset-x-0 top-0 h-[2px] bg-zinc-900/60" aria-hidden="true">
         <div
-          className="h-full origin-left bg-gradient-to-r from-zinc-100/70 via-white to-zinc-400/50"
-          style={{ transform: `scaleX(${progress})`, transition: "transform 120ms linear" }}
+          ref={progressBarRef}
+          className="h-full origin-left bg-gradient-to-r from-zinc-100/70 via-white to-zinc-400/50 [transform:scaleX(0)] [will-change:transform]"
         />
       </div>
       <nav
         className={cn(
-          "mx-auto flex max-w-5xl items-center justify-between gap-4 rounded-2xl border px-4 py-3 transition-all duration-300 sm:px-5",
+          "mx-auto flex max-w-5xl items-center justify-between gap-4 rounded-2xl border px-4 py-3 transition-colors duration-200 sm:px-5",
           scrolled
-            ? "border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md shadow-[0_10px_40px_-20px_rgba(0,0,0,0.9)]"
-            : "border-zinc-800/40 bg-zinc-950/40 backdrop-blur-md"
+            ? "border-zinc-800/80 bg-zinc-950/90 shadow-[0_10px_40px_-20px_rgba(0,0,0,0.9)]"
+            : "border-zinc-800/40 bg-zinc-950/70"
         )}
       >
         <a href="#top" className="group flex items-center gap-2.5">
@@ -59,7 +91,7 @@ export default function Nav() {
               key={link.href}
               href={link.href}
               className={cn(
-                "rounded-full px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors duration-200",
+                "rounded-full px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors duration-150",
                 active === link.href
                   ? "bg-zinc-800/70 text-cyan-300"
                   : "text-slate-400 hover:text-slate-100"
@@ -91,8 +123,8 @@ export default function Nav() {
       </nav>
 
       {open && (
-        <div className="mx-auto mt-2 max-w-5xl overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-950/95 backdrop-blur-md md:hidden">
-          <div className="flex flex-col p-2">
+        <div className="mx-auto mt-2 max-w-5xl overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-950 p-2 md:hidden">
+          <div className="flex flex-col">
             {navLinks.map((link) => (
               <a
                 key={link.href}
