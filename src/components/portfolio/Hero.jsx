@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight, MapPin, Mail, Phone, Github, Linkedin, BadgeCheck, FileText } from "lucide-react";
 import { Image } from "@/components/ui/image";
 import { profile } from "@/data/portfolio";
+import Terminal from "@/components/portfolio/Terminal";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -17,14 +18,14 @@ const links = [
 
 export default function Hero() {
   return (
-    <section id="top" className="relative isolate overflow-hidden pb-16 pt-28 sm:pb-24 sm:pt-32 [transform:translateZ(0)] [contain:paint]">
-      {/* Static, high-performance background layers */}
+    <section id="top" className="relative isolate overflow-hidden pb-16 pt-28 sm:pb-24 sm:pt-32 [transform:translateZ(0)]">
+      {/* High-performance GPU-friendly background layers */}
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[#09090b]" />
       <div className="pointer-events-none absolute inset-0 -z-10 grid-lines opacity-20 [transform:translateZ(0)]" />
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-96 bg-[radial-gradient(ellipse_at_top,rgba(6,182,212,0.08),transparent_70%)] [transform:translateZ(0)]" />
 
-      <div className="mx-auto max-w-5xl px-6">
-        <div className="max-w-3xl">
+      <div className="mx-auto grid max-w-5xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-12 lg:gap-8">
+        <div className="lg:col-span-6">
           <motion.div initial="hidden" animate="show" variants={fadeUp} className="mb-6">
             <span className="inline-flex items-start gap-2 rounded-2xl border border-emerald-400/25 bg-emerald-400/[0.07] px-3 py-1.5 font-mono text-[10px] uppercase leading-relaxed tracking-[0.1em] text-emerald-300">
               <span className="relative mt-1 flex h-1.5 w-1.5 shrink-0">
@@ -123,6 +124,17 @@ export default function Hero() {
             <MapPin className="h-3.5 w-3.5" /> {profile.location}
           </p>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          className="min-w-0 lg:col-span-6"
+        >
+          <div className="relative [transform:translateZ(0)]">
+            <Terminal />
+          </div>
+        </motion.div>
       </div>
     </section>
   );
