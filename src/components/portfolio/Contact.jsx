@@ -20,7 +20,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="relative border-t border-zinc-900 py-20 sm:py-24">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(ellipse_at_top,rgba(34,211,238,0.07),transparent_70%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(ellipse_at_top,rgba(34,211,238,0.07),transparent_70%)] [transform:translateZ(0)]" />
       <div className="relative mx-auto max-w-5xl px-6">
         <SectionHeading
           index="06"
@@ -60,7 +60,7 @@ export default function Contact() {
               href={profile.github}
             />
 
-            <div className="mt-4 rounded-xl border border-zinc-800 bg-zinc-900/40 p-4 backdrop-blur-md">
+            <div className="mt-4 rounded-xl border border-zinc-800 bg-zinc-900/90 p-4 [transform:translateZ(0)]">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-slate-500">
                   <MapPin className="h-3.5 w-3.5 text-cyan-400/80" /> {profile.location}
@@ -78,7 +78,7 @@ export default function Contact() {
 
           <form
             onSubmit={handleSubmit}
-            className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5 backdrop-blur-md sm:p-6"
+            className="rounded-2xl border border-zinc-800 bg-zinc-900/90 p-5 [transform:translateZ(0)] sm:p-6"
           >
             <div className="space-y-4">
               <div>
@@ -91,7 +91,7 @@ export default function Contact() {
                   value={form.name}
                   onChange={update("name")}
                   placeholder="Your name"
-                  className="mt-1.5 w-full rounded-lg border border-zinc-800 bg-zinc-950/60 px-3 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:border-cyan-400/60 focus:outline-none"
+                  className="mt-1.5 w-full rounded-lg border border-zinc-800 bg-zinc-950/80 px-3 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:border-cyan-400/60 focus:outline-none"
                 />
               </div>
               <div>
@@ -105,7 +105,7 @@ export default function Contact() {
                   value={form.email}
                   onChange={update("email")}
                   placeholder="you@company.com"
-                  className="mt-1.5 w-full rounded-lg border border-zinc-800 bg-zinc-950/60 px-3 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:border-cyan-400/60 focus:outline-none"
+                  className="mt-1.5 w-full rounded-lg border border-zinc-800 bg-zinc-950/80 px-3 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:border-cyan-400/60 focus:outline-none"
                 />
               </div>
               <div>
@@ -119,7 +119,7 @@ export default function Contact() {
                   value={form.message}
                   onChange={update("message")}
                   placeholder="Role, project, or question…"
-                  className="mt-1.5 w-full resize-none rounded-lg border border-zinc-800 bg-zinc-950/60 px-3 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:border-cyan-400/60 focus:outline-none"
+                  className="mt-1.5 w-full resize-none rounded-lg border border-zinc-800 bg-zinc-950/80 px-3 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:border-cyan-400/60 focus:outline-none"
                 />
               </div>
               <button

@@ -16,8 +16,8 @@ export default function ContactChip({ icon: Icon, label, value, copyValue, href 
   };
 
   return (
-    <div className="group relative flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900/40 p-3 backdrop-blur-md transition-colors hover:border-cyan-400/30">
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-zinc-800 bg-zinc-950/60">
+    <div className="group relative flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900/90 p-3 [transform:translateZ(0)] transition-colors hover:border-cyan-400/30">
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-zinc-800 bg-zinc-950">
         <Icon className="h-3.5 w-3.5 text-cyan-400" />
       </span>
       <button
